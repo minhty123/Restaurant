@@ -4,9 +4,7 @@ import "./App.css";
 import Loading from "./components/Loading/Loading";
 import PageNotFound from "./components/NotFound/PageNotFound";
 import About from "./components/About";
-
-const ViewHome = React.lazy(() => import("./pages/ViewHome"));
-
+import ViewHome from "./pages/ViewHome";
 
 function App() {
   return (
