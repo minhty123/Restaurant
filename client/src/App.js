@@ -4,6 +4,7 @@ import "./App.css";
 import Loading from "./components/Loading/Loading";
 import PageNotFound from "./components/NotFound/PageNotFound";
 import About from "./components/About";
+import Home from "./components/Home/Home"
 import ViewHome from "./pages/ViewHome";
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ViewHome />} />
           <Route path="/about" element={<About />} />
-
+          
           <Route path="/loading" element={<Loading />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
