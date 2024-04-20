@@ -3,9 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Loading from "./components/Loading/Loading";
 import PageNotFound from "./components/NotFound/PageNotFound";
-import About from "./components/About";
-import Home from "./components/Home/Home"
 import ViewHome from "./pages/ViewHome";
+import ViewCustomer from "./pages/ViewCustomer";
+import ViewEmployees from "./pages/ViewEmployee";
+import ViewTable from "./pages/ViewTable";
 
 function App() {
   return (
@@ -13,8 +14,9 @@ function App() {
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<ViewHome />} />
-          <Route path="/about" element={<About />} />
-          
+          <Route path="/customers" element={<ViewCustomer />} />
+          <Route path="/employees" element={<ViewEmployees />} />
+          <Route path="/tables" element={<ViewTable />} />
           <Route path="/loading" element={<Loading />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
