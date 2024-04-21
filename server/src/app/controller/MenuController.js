@@ -1,30 +1,30 @@
-const Customer = require('../models/Customer');
+const Menu = require('../models/Menu');
 
-class CustomerController {
-  //[GET] /customers/
+class MenuController {
+  //[GET] /menus/
   async show(req, res) {
-    Customer.find({})
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
+    Menu.find({})
+      .then((menu) => {
+        res.status(200).json({ success: true, menu });
       })
       .catch((err) => {
         res.status(500).json({ success: false, err });
       });
   }
-  //[GET] /customers/:slug
+  //[GET] /menus/:slug
   async detail(req, res) {
-    Customer.findOne({ slug: req.params.slug })
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
+    Menu.findOne({ slug: req.params.slug })
+      .then((menu) => {
+        res.status(200).json({ success: true, menu });
       })
       .catch((err) => {
         res.status(500).json({ success: false, err });
       });
   }
-  //[POST] /customers/create
+  //[POST] /menus/create
   async create(req, res) {
-    const customer = new Customer(req.body);
-    customer
+    const menu = new Menu(req.body);
+    menu
       .save()
       .then(() => {
         res.status(201).json({ success: true, message: 'successfull' });
@@ -33,9 +33,9 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  //[PUT] /customers
+  //[PUT] /menus
   async edit(req, res) {
-    Customer.findOneAndUpdate({ slug: req.params.slug }, req.body, {
+    Menu.findOneAndUpdate({ slug: req.params.slug }, req.body, {
       new: true
     })
       .then(() => {
@@ -45,9 +45,9 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  //[DELETE] /customers/:id
+  //[DELETE] /menus/:id
   async delete(req, res) {
-    Customer.findByIdAndDelete(req.params.id)
+    Menu.findByIdAndDelete(req.params.id)
       .then(() => {
         res.status(200).json({ success: true, message: 'successfully' });
       })
@@ -57,4 +57,4 @@ class CustomerController {
   }
 }
 
-module.exports = new CustomerController();
+module.exports = new MenuController();

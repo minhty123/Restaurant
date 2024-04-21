@@ -6,6 +6,8 @@ const CustomerSchema = new mongoose.Schema(
     c_name: { type: String, required: true },
     c_address: { type: String, required: true },
     phone: { type: Number, required: false },
+    email: { type: String, require: true },
+    age: { type: String, require: true },
     slug: { type: String, slug: 'name', unique: true }
   },
   {

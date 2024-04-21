@@ -1,30 +1,30 @@
-const Customer = require('../models/Customer');
+const Employee = require('../models/Employee');
 
-class CustomerController {
-  //[GET] /customers/
+class EmployeeController {
+  //[GET] /employees/
   async show(req, res) {
-    Customer.find({})
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
+    Employee.find({})
+      .then((employee) => {
+        res.status(200).json({ success: true, employee });
       })
       .catch((err) => {
         res.status(500).json({ success: false, err });
       });
   }
-  //[GET] /customers/:slug
+  //[GET] /employees/:slug
   async detail(req, res) {
-    Customer.findOne({ slug: req.params.slug })
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
+    Employee.findOne({ slug: req.params.slug })
+      .then((employee) => {
+        res.status(200).json({ success: true, employee });
       })
       .catch((err) => {
         res.status(500).json({ success: false, err });
       });
   }
-  //[POST] /customers/create
+  //[POST] /employees/create
   async create(req, res) {
-    const customer = new Customer(req.body);
-    customer
+    const employee = new Employee(req.body);
+    employee
       .save()
       .then(() => {
         res.status(201).json({ success: true, message: 'successfull' });
@@ -33,9 +33,9 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  //[PUT] /customers
+  //[PUT] /employees
   async edit(req, res) {
-    Customer.findOneAndUpdate({ slug: req.params.slug }, req.body, {
+    Employee.findOneAndUpdate({ slug: req.params.slug }, req.body, {
       new: true
     })
       .then(() => {
@@ -45,9 +45,9 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  //[DELETE] /customers/:id
+  //[DELETE] /employees/:id
   async delete(req, res) {
-    Customer.findByIdAndDelete(req.params.id)
+    Employee.findByIdAndDelete(req.params.id)
       .then(() => {
         res.status(200).json({ success: true, message: 'successfully' });
       })
@@ -57,4 +57,4 @@ class CustomerController {
   }
 }
 
-module.exports = new CustomerController();
+module.exports = new EmployeeController();

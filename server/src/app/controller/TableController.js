@@ -1,30 +1,30 @@
-const Customer = require('../models/Customer');
+const Table = require('../models/Table');
 
-class CustomerController {
-  //[GET] /customers/
+class TableController {
+  //[GET] /tables/
   async show(req, res) {
-    Customer.find({})
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
+    Table.find({})
+      .then((table) => {
+        res.status(200).json({ success: true, table });
       })
       .catch((err) => {
         res.status(500).json({ success: false, err });
       });
   }
-  //[GET] /customers/:slug
+  //[GET] /tables/:slug
   async detail(req, res) {
-    Customer.findOne({ slug: req.params.slug })
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
+    Table.findOne({ slug: req.params.slug })
+      .then((table) => {
+        res.status(200).json({ success: true, table });
       })
       .catch((err) => {
         res.status(500).json({ success: false, err });
       });
   }
-  //[POST] /customers/create
+  //[POST] /tables/create
   async create(req, res) {
-    const customer = new Customer(req.body);
-    customer
+    const table = new Table(req.body);
+    table
       .save()
       .then(() => {
         res.status(201).json({ success: true, message: 'successfull' });
@@ -33,9 +33,9 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  //[PUT] /customers
+  //[PUT] /tables
   async edit(req, res) {
-    Customer.findOneAndUpdate({ slug: req.params.slug }, req.body, {
+    Table.findOneAndUpdate({ slug: req.params.slug }, req.body, {
       new: true
     })
       .then(() => {
@@ -45,9 +45,9 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  //[DELETE] /customers/:id
+  //[DELETE] /tables/:id
   async delete(req, res) {
-    Customer.findByIdAndDelete(req.params.id)
+    Table.findByIdAndDelete(req.params.id)
       .then(() => {
         res.status(200).json({ success: true, message: 'successfully' });
       })
@@ -57,4 +57,4 @@ class CustomerController {
   }
 }
 
-module.exports = new CustomerController();
+module.exports = new TableController();
