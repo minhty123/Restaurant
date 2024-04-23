@@ -1,6 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
+import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -215,19 +216,9 @@ function EnhancedTableToolbar(props) {
           </Typography>
         )}
 
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+        <IconButton color="primary" aria-label="plus">
+          <AddIcon />
+        </IconButton>
       </Toolbar>
     </Container>
   );

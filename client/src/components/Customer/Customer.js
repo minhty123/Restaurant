@@ -1,4 +1,7 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -23,14 +26,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
-function createData(id, name, calories, fat, carbs, protein) {
+function createData(id, name, address, phone, email, age) {
   return {
     id,
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    address,
+    phone,
+    email,
+    age,
   };
 }
 
@@ -66,10 +69,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -87,31 +86,31 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "name",
   },
   {
-    id: "calories",
+    id: "address",
     numeric: true,
     disablePadding: false,
-    label: "Calories",
+    label: "address",
   },
   {
-    id: "fat",
+    id: "phone",
     numeric: true,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "phone",
   },
   {
-    id: "carbs",
+    id: "email",
     numeric: true,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "email",
   },
   {
-    id: "protein",
+    id: "age",
     numeric: true,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "age",
   },
 ];
 
@@ -211,23 +210,12 @@ function EnhancedTableToolbar(props) {
             id="tableTitle"
             component="div"
           >
-            Nutrition
+            Danh sách Khách hàng
           </Typography>
         )}
-
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+        <IconButton color="primary" aria-label="plus">
+          <AddIcon />
+        </IconButton>
       </Toolbar>
     </Container>
   );
@@ -236,14 +224,19 @@ function EnhancedTableToolbar(props) {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
-
-export default function EnhancedTable() {
+const Customer = () => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = (e) => {
+    setShow(true);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -307,6 +300,17 @@ export default function EnhancedTable() {
     [order, orderBy, page, rowsPerPage]
   );
 
+  const [customers, setCustomers] = useState([]);
+  async function getCustomers() {
+    const res = await axios.get("http://localhost:8000/customers");
+    setCustomers(res.data.customer);
+  }
+  useEffect(() => {
+    getCustomers();
+  }, []);
+
+  //   //bảng hiện thị
+
   return (
     <Container maxWidth="xxl" sx={{ mt: 6, mb: 6 }}>
       <Box sx={{ width: "100%" }}>
@@ -334,11 +338,11 @@ export default function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, customers._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={customers._id}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                     >
@@ -351,18 +355,13 @@ export default function EnhancedTable() {
                           }}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
+                      <TableCell component="th" id={labelId} scope="row">
+                        {customers.c_name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{customers.c_address}</TableCell>
+                      <TableCell align="right">{customers.phone}</TableCell>
+                      <TableCell align="right">{customers.email}</TableCell>
+                      <TableCell align="right">{customers.age}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -395,4 +394,6 @@ export default function EnhancedTable() {
       </Box>
     </Container>
   );
-}
+};
+
+export default Customer;
