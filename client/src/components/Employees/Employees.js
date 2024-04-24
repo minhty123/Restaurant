@@ -1,7 +1,9 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
-import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,33 +26,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
-function createData(id, name, calories, fat, carbs, protein) {
-  return {
-    id,
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-const rows = [
-  createData(1, "Cupcake", 305, 3.7, 67, 4.3),
-  createData(2, "Donut", 452, 25.0, 51, 4.9),
-  createData(3, "Eclair", 262, 16.0, 24, 6.0),
-  createData(4, "Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData(5, "Gingerbread", 356, 16.0, 49, 3.9),
-  createData(6, "Honeycomb", 408, 3.2, 87, 6.5),
-  createData(7, "Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData(8, "Jelly Bean", 375, 0.0, 94, 0.0),
-  createData(9, "KitKat", 518, 26.0, 65, 7.0),
-  createData(10, "Lollipop", 392, 0.2, 98, 0.0),
-  createData(11, "Marshmallow", 318, 0, 81, 2.0),
-  createData(12, "Nougat", 360, 19.0, 9, 37.0),
-  createData(13, "Oreo", 437, 18.0, 63, 4.0),
-];
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -67,10 +42,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -88,31 +59,31 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "name",
   },
   {
-    id: "calories",
+    id: "address",
     numeric: true,
     disablePadding: false,
-    label: "Calories",
+    label: "address",
   },
   {
-    id: "fat",
+    id: "phone",
     numeric: true,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "phone",
   },
   {
-    id: "carbs",
+    id: "email",
     numeric: true,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "email",
   },
   {
-    id: "protein",
+    id: "position",
     numeric: true,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "position",
   },
 ];
 
@@ -212,13 +183,22 @@ function EnhancedTableToolbar(props) {
             id="tableTitle"
             component="div"
           >
-            Nutrition
+            Danh sách Nhân Viên
           </Typography>
         )}
-
-        <IconButton color="primary" aria-label="plus">
-          <AddIcon />
-        </IconButton>
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Add">
+            <IconButton>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Toolbar>
     </Container>
   );
@@ -227,14 +207,27 @@ function EnhancedTableToolbar(props) {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
-
-export default function EnhancedTable() {
+const Customer = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("e_address");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = (e) => {
+    setShow(true);
+  };
+  const [employees, setEmployees] = useState([]);
+  async function getEmployees() {
+    const res = await axios.get("http://localhost:8000/employees");
+    setEmployees(res.data.employee);
+  }
+  useEffect(() => {
+    getEmployees();
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -244,7 +237,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = employees.map((e) => e._id);
       setSelected(newSelected);
       return;
     }
@@ -287,19 +280,21 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - employees.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(employees, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [employees, order, orderBy, page, rowsPerPage]
   );
 
+  //   //bảng hiện thị
+
   return (
-    <Container maxWidth="xxl" sx={{ mt: 6, mb: 6 }}>
+    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -315,21 +310,21 @@ export default function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={employees.length}
               />
               <TableBody>
-                {visibleRows.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                {visibleRows.map((employee, index) => {
+                  const isItemSelected = isSelected(employee._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, employee._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={employee._id}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                     >
@@ -342,18 +337,13 @@ export default function EnhancedTable() {
                           }}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
+                      <TableCell component="th" id={labelId} scope="row">
+                        {employee.e_name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{employee.e_address}</TableCell>
+                      <TableCell align="right">{employee.phone}</TableCell>
+                      <TableCell align="right">{employee.email}</TableCell>
+                      <TableCell align="right">{employee.position}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -372,7 +362,7 @@ export default function EnhancedTable() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={rows.length}
+            count={employees.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -386,4 +376,6 @@ export default function EnhancedTable() {
       </Box>
     </Container>
   );
-}
+};
+
+export default Customer;

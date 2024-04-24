@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-import { IconButton } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -19,6 +15,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -26,16 +23,32 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
-function createData(id, name, address, phone, email, age) {
+function createData(id, name, calories, fat, carbs, protein) {
   return {
     id,
     name,
-    address,
-    phone,
-    email,
-    age,
+    calories,
+    fat,
+    carbs,
+    protein,
   };
 }
+
+const rows = [
+  createData(1, "Cupcake", 305, 3.7, 67, 4.3),
+  createData(2, "Donut", 452, 25.0, 51, 4.9),
+  createData(3, "Eclair", 262, 16.0, 24, 6.0),
+  createData(4, "Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData(5, "Gingerbread", 356, 16.0, 49, 3.9),
+  createData(6, "Honeycomb", 408, 3.2, 87, 6.5),
+  createData(7, "Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData(8, "Jelly Bean", 375, 0.0, 94, 0.0),
+  createData(9, "KitKat", 518, 26.0, 65, 7.0),
+  createData(10, "Lollipop", 392, 0.2, 98, 0.0),
+  createData(11, "Marshmallow", 318, 0, 81, 2.0),
+  createData(12, "Nougat", 360, 19.0, 9, 37.0),
+  createData(13, "Oreo", 437, 18.0, 63, 4.0),
+];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -53,6 +66,10 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
+// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
+// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
+// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -70,31 +87,31 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "name",
+    label: "Dessert (100g serving)",
   },
   {
-    id: "address",
+    id: "calories",
     numeric: true,
     disablePadding: false,
-    label: "address",
+    label: "Calories",
   },
   {
-    id: "phone",
+    id: "fat",
     numeric: true,
     disablePadding: false,
-    label: "phone",
+    label: "Fat (g)",
   },
   {
-    id: "email",
+    id: "carbs",
     numeric: true,
     disablePadding: false,
-    label: "email",
+    label: "Carbs (g)",
   },
   {
-    id: "age",
+    id: "protein",
     numeric: true,
     disablePadding: false,
-    label: "age",
+    label: "Protein (g)",
   },
 ];
 
@@ -194,9 +211,10 @@ function EnhancedTableToolbar(props) {
             id="tableTitle"
             component="div"
           >
-            Danh sách Khách hàng
+            Nutrition
           </Typography>
         )}
+
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton>
@@ -204,9 +222,9 @@ function EnhancedTableToolbar(props) {
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Add">
-            <IconButton component={Link} to="/add">
-              <AddIcon />
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
             </IconButton>
           </Tooltip>
         )}
@@ -218,27 +236,14 @@ function EnhancedTableToolbar(props) {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
-const Customer = () => {
+
+export default function EnhancedTable() {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("c_address");
+  const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = (e) => {
-    setShow(true);
-  };
-  const [customers, setCustomers] = useState([]);
-  async function getCustomers() {
-    const res = await axios.get("http://localhost:8000/customers");
-    setCustomers(res.data.customer);
-  }
-  useEffect(() => {
-    getCustomers();
-  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -248,7 +253,7 @@ const Customer = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = customers.map((c) => c._id);
+      const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -291,21 +296,19 @@ const Customer = () => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customers.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(customers, getComparator(order, orderBy)).slice(
+      stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [customers, order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage]
   );
 
-  //   //bảng hiện thị
-
   return (
-    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
+    <Container maxWidth="xxl" sx={{ mt: 6, mb: 6 }}>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -321,21 +324,21 @@ const Customer = () => {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={customers.length}
+                rowCount={rows.length}
               />
               <TableBody>
-                {visibleRows.map((customer, index) => {
-                  const isItemSelected = isSelected(customer._id);
+                {visibleRows.map((row, index) => {
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, customer._id)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={customer._id}
+                      key={row.id}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                     >
@@ -348,13 +351,18 @@ const Customer = () => {
                           }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row">
-                        {customer.c_name}
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.name}
                       </TableCell>
-                      <TableCell align="right">{customer.c_address}</TableCell>
-                      <TableCell align="right">{customer.phone}</TableCell>
-                      <TableCell align="right">{customer.email}</TableCell>
-                      <TableCell align="right">{customer.age}</TableCell>
+                      <TableCell align="right">{row.calories}</TableCell>
+                      <TableCell align="right">{row.fat}</TableCell>
+                      <TableCell align="right">{row.carbs}</TableCell>
+                      <TableCell align="right">{row.protein}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -373,7 +381,7 @@ const Customer = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={customers.length}
+            count={rows.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -387,6 +395,4 @@ const Customer = () => {
       </Box>
     </Container>
   );
-};
-
-export default Customer;
+}

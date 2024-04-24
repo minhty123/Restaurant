@@ -61,7 +61,13 @@ const Header = () => {
             >
               Tables
             </Link>
-
+            <Link
+              to="/menus"
+              className="hover:text-brightColor transition-all cursor-pointer"
+              onClick={closeMenu}
+            >
+              Menu
+            </Link>
             <Button title="Login" />
           </nav>
 

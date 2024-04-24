@@ -7,6 +7,7 @@ import ViewHome from "./pages/ViewHome";
 import ViewCustomer from "./pages/Customer/ViewCustomer";
 import ViewAddCustomer from "./pages/Customer/ViewAddCustomer";
 import ViewEmployees from "./pages/ViewEmployee";
+import ViewMenu from "./pages/ViewMenu";
 import ViewTable from "./pages/ViewTable";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/add" element={<ViewAddCustomer />} />
           <Route path="/employees" element={<ViewEmployees />} />
           <Route path="/tables" element={<ViewTable />} />
+          <Route path="/menus" element={<ViewMenu />} />
           <Route path="/loading" element={<Loading />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
