@@ -9,7 +9,6 @@ const TableSchema = new mongoose.Schema(
     description: { type: String, require: true },
     reserved: { type: String, require: true },
     reserved_time: { type: String, require: true },
-    o_id: { type: String, require: true },
     slug: { type: String, slug: 'e_name', unique: true }
   },
   {

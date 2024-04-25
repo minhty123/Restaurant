@@ -26,17 +26,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
-function createData(id, name, address, phone, email, age) {
-  return {
-    id,
-    name,
-    address,
-    phone,
-    email,
-    age,
-  };
-}
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -83,18 +72,6 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "phone",
-  },
-  {
-    id: "email",
-    numeric: true,
-    disablePadding: false,
-    label: "email",
-  },
-  {
-    id: "age",
-    numeric: true,
-    disablePadding: false,
-    label: "age",
   },
 ];
 
@@ -220,17 +197,17 @@ EnhancedTableToolbar.propTypes = {
 };
 const Customer = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("c_address");
+  const [orderBy, setOrderBy] = React.useState("c_name");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = (e) => {
-    setShow(true);
-  };
+  // const [show, setShow] = useState(false);
+  // const handleClose = () => setShow(false);
+  // const handleShow = (e) => {
+  //   setShow(true);
+  // };
   const [customers, setCustomers] = useState([]);
   async function getCustomers() {
     const res = await axios.get("http://localhost:8000/customers");
@@ -353,8 +330,6 @@ const Customer = () => {
                       </TableCell>
                       <TableCell align="right">{customer.c_address}</TableCell>
                       <TableCell align="right">{customer.phone}</TableCell>
-                      <TableCell align="right">{customer.email}</TableCell>
-                      <TableCell align="right">{customer.age}</TableCell>
                     </TableRow>
                   );
                 })}

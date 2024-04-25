@@ -17,7 +17,7 @@ const AddCustomer = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
       <React.Fragment>
-        <h2>Register Form</h2>
+        <h2>Thêm thông tin Khách hàng</h2>
         <br></br>
         <form onSubmit={handleSubmit} action={<Link to="/login" />}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -77,7 +77,7 @@ const AddCustomer = () => {
           </Stack>
 
           <Button variant="outlined" color="secondary" type="submit">
-            Register
+            Thêm
           </Button>
         </form>
       </React.Fragment>
