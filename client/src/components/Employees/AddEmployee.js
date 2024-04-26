@@ -3,7 +3,7 @@ import { TextField, Button, Container, Stack } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const AddCustomer = () => {
+const AddEmployee = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -16,16 +16,19 @@ const AddCustomer = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     const form = e.target;
-    const newCustomer = {
-      c_name: form.name.value,
+    const newEmployee = {
+      e_name: form.name.value,
+      position: form.position.value,
+      birthday: form.birthday.value,
+      e_address: form.address.value,
       phone: form.phone.value,
-      checkin: form.checkin.value,
-      checkout: form.checkout.value,
+      email: form.email.value,
+      salary: form.salary.value,
     };
     try {
       const res = await axios.post(
-        "http://localhost:8000/customers/create",
-        newCustomer
+        "http://localhost:8000/employees/create",
+        newEmployee
       );
       setNoti(res.status);
       setCheckSuccess(true);
@@ -67,14 +70,14 @@ const AddCustomer = () => {
               required
             />
           </Stack>
-          
+
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextField
               type="date"
               variant="outlined"
               color="secondary"
-              label="Checkin"
-              name="checkin"
+              label="Birthday"
+              name="birthday"
               onChange={(e) => setCheckin(e.target.value)}
               value={checkin}
               fullWidth
@@ -102,4 +105,4 @@ const AddCustomer = () => {
   );
 };
 
-export default AddCustomer;
+export default AddEmployee;

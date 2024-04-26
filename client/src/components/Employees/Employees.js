@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
@@ -56,34 +56,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "e_name",
     numeric: false,
     disablePadding: true,
     label: "name",
   },
   {
-    id: "address",
-    numeric: true,
+    id: "position",
+    numeric: false,
+    disablePadding: false,
+    label: "position",
+  },
+  {
+    id: "e_address",
+    numeric: false,
     disablePadding: false,
     label: "address",
   },
   {
-    id: "phone",
-    numeric: true,
-    disablePadding: false,
-    label: "phone",
-  },
-  {
     id: "email",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "email",
   },
   {
-    id: "position",
-    numeric: true,
+    id: "phone",
+    numeric: false,
     disablePadding: false,
-    label: "position",
+    label: "phone",
   },
 ];
 
@@ -193,8 +193,8 @@ function EnhancedTableToolbar(props) {
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Add">
-            <IconButton>
+          <Tooltip title="Create">
+            <IconButton component={Link} to="/employees/create">
               <AddIcon />
             </IconButton>
           </Tooltip>
@@ -337,13 +337,18 @@ const Customer = () => {
                           }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row">
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
                         {employee.e_name}
                       </TableCell>
-                      <TableCell align="right">{employee.e_address}</TableCell>
-                      <TableCell align="right">{employee.phone}</TableCell>
-                      <TableCell align="right">{employee.email}</TableCell>
-                      <TableCell align="right">{employee.position}</TableCell>
+                      <TableCell align="left">{employee.position}</TableCell>
+                      <TableCell align="left">{employee.e_address}</TableCell>
+                      <TableCell align="left">{employee.email}</TableCell>
+                      <TableCell align="left">{employee.phone}</TableCell>
                     </TableRow>
                   );
                 })}

@@ -56,20 +56,20 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "c_name",
     numeric: false,
     disablePadding: true,
     label: "name",
   },
   {
-    id: "address",
-    numeric: true,
+    id: "c_address",
+    numeric: false,
     disablePadding: false,
     label: "address",
   },
   {
     id: "phone",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "phone",
   },
@@ -181,8 +181,8 @@ function EnhancedTableToolbar(props) {
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Add">
-            <IconButton component={Link} to="/add">
+          <Tooltip title="Create">
+            <IconButton component={Link} to="/customers/create">
               <AddIcon />
             </IconButton>
           </Tooltip>
@@ -201,7 +201,7 @@ const Customer = () => {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // const [show, setShow] = useState(false);
   // const handleClose = () => setShow(false);
@@ -325,11 +325,16 @@ const Customer = () => {
                           }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row">
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
                         {customer.c_name}
                       </TableCell>
-                      <TableCell align="right">{customer.c_address}</TableCell>
-                      <TableCell align="right">{customer.phone}</TableCell>
+                      <TableCell align="left">{customer.c_address}</TableCell>
+                      <TableCell align="left">{customer.phone}</TableCell>
                     </TableRow>
                   );
                 })}
