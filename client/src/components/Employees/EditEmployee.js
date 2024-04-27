@@ -24,37 +24,41 @@ const AddEmployee = () => {
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newEmployee = {
-      e_name: name,
-      position: position,
-      birthday: birthday,
-      e_address: address,
-      phone: phone,
-      email: email,
-      salary: salary,
-    };
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/employees/create",
-        newEmployee
+  async function handleSubmitEdit(e) {
+    const check = e.currentTarget;
+    if (check.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      e.preventDefault();
+      const form = e.target;
+      const newEmployee = {
+        e_name: name,
+        position: position,
+        birthday: birthday,
+        e_address: address,
+        phone: phone,
+        email: email,
+        salary: salary,
+      };
+      const res = await axios.put(
+        "http://localhost:8000/employees/" + slug,
+        newPartner
       );
       setNoti(res.status);
       setCheckSuccess(true);
-      // Reset the form
-      setName("");
-      setPosition("");
-      setBirthday("");
-      setAddress("");
-      setPhone("");
-      setEmail("");
-      setSalary("");
-    } catch (error) {
-      console.error(error);
     }
     setValidated(true);
-  };
+  }
+  async function getEmployee() {
+    if (props.type === "edit") {
+      const res = await axios.get("http://localhost:8000/employees/" + slug);
+      setEmployee(res.data.employee);
+    }
+  }
+  useEffect(() => {
+    getEmployee();
+  }, props.data);
 
   const handleChange = (event) => {
     setPosition(event.target.value);
@@ -165,8 +169,6 @@ const AddEmployee = () => {
       {validated && !checkSuccess && (
         <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
       )}
-
-      
     </Container>
   );
 };

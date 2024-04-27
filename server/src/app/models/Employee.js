@@ -3,13 +3,13 @@ const slug = require('mongoose-slug-generator');
 
 const EmployeeSchema = new mongoose.Schema(
   {
-    e_name: { type: String, require: true },
-    position: { type: String, require: true },
-    birthday: { type: Date, require: true },
-    e_address: { type: String, require: true },
-    phone: { type: Number, require: true },
-    email: { type: String, require: true },
-    salary: { type: Number, require: true },
+    e_name: { type: String, required: true },
+    position: { type: String, required: true },
+    birthday: { type: Date, required: true },
+    e_address: { type: String, required: true },
+    phone: { type: Number, required: true },
+    email: { type: String, required: true },
+    salary: { type: Number, required: true },
     slug: { type: String, slug: 'e_name', unique: true }
   },
   {

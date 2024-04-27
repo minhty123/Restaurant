@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { Modal } from "@mui/material";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
@@ -85,6 +88,12 @@ const headCells = [
     disablePadding: false,
     label: "phone",
   },
+  {
+    id: "status",
+    numeric: false,
+    disablePadding: false,
+    label: "status",
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -149,64 +158,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
-
-  return (
-    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Danh sách Nhân Viên
-          </Typography>
-        )}
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Create">
-            <IconButton component={Link} to="/employees/create">
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-    </Container>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 const Customer = () => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("e_address");
@@ -214,13 +165,75 @@ const Customer = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  const [employeeId, setEmployeeId] = useState("");
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = (e) => {
     setShow(true);
+    setEmployeeId(e);
   };
   const [employees, setEmployees] = useState([]);
+
+  function EnhancedTableToolbar(props) {
+    const { numSelected } = props;
+
+    return (
+      <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...(numSelected > 0 && {
+              bgcolor: (theme) =>
+                alpha(
+                  theme.palette.primary.main,
+                  theme.palette.action.activatedOpacity
+                ),
+            }),
+          }}
+        >
+          {numSelected > 0 ? (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              color="inherit"
+              variant="subtitle1"
+              component="div"
+            >
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              variant="h6"
+              id="tableTitle"
+              component="div"
+            >
+              Danh sách Nhân Viên
+            </Typography>
+          )}
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Create">
+              <IconButton component={Link} to="/employees/create">
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Toolbar>
+      </Container>
+    );
+  }
+
+  EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+  };
+
   async function getEmployees() {
     const res = await axios.get("http://localhost:8000/employees");
     setEmployees(res.data.employee);
@@ -228,6 +241,14 @@ const Customer = () => {
   useEffect(() => {
     getEmployees();
   }, []);
+  async function deleteEmployee() {
+    await axios.delete("http://localhost:8000/employees/" + employeeId);
+    handleClose();
+    window.location.reload();
+  }
+  const editEmployee = (e) => {
+    navigate("/employees/" + e);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -349,6 +370,22 @@ const Customer = () => {
                       <TableCell align="left">{employee.e_address}</TableCell>
                       <TableCell align="left">{employee.email}</TableCell>
                       <TableCell align="left">{employee.phone}</TableCell>
+                      <TableCell align="left">
+                        <Button
+                          className="edit-delete"
+                          onClick={() => {
+                            editEmployee(`${employee.slug}`);
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>{" "}
+                        <IconButton
+                          className="edit-delete"
+                          onClick={() => handleShow(`${employee._id}`)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -379,6 +416,44 @@ const Customer = () => {
           label="Dense padding"
         />
       </Box>
+      <Modal
+        open={show}
+        onClose={handleClose}
+        disableBackdropClick
+        disableEscapeKeyDown
+      >
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 2,
+            width: 400,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Wait!
+          </Typography>
+          <Typography variant="body1" component="p">
+            Are you sure you want to delete this partner?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button variant="contained" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={deleteEmployee}
+              sx={{ ml: 2 }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 };
