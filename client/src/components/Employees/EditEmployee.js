@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -10,9 +10,12 @@ import {
   Select,
 } from "@mui/material";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const AddEmployee = () => {
+const EditEmployee = (props) => {
+  const [employee, setEmployee] = useState({});
+  const { slug } = useParams();
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [birthday, setBirthday] = useState("");
@@ -43,7 +46,7 @@ const AddEmployee = () => {
       };
       const res = await axios.put(
         "http://localhost:8000/employees/" + slug,
-        newPartner
+        newEmployee
       );
       setNoti(res.status);
       setCheckSuccess(true);
@@ -58,7 +61,7 @@ const AddEmployee = () => {
   }
   useEffect(() => {
     getEmployee();
-  }, props.data);
+  }, []);
 
   const handleChange = (event) => {
     setPosition(event.target.value);
@@ -66,15 +69,15 @@ const AddEmployee = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Thêm thông tin Nhân Viên</h2>
+      <h2>Sửa thông tin Nhân Viên</h2>
       <br />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitEdit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
             type="text"
             variant="outlined"
             color="secondary"
-            label="Họ và Tên"
+            label={employee.e_name}
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
@@ -159,18 +162,18 @@ const AddEmployee = () => {
         </Stack>
 
         <Button variant="outlined" color="secondary" type="submit">
-          Thêm
+          Sửa
         </Button>
       </form>
 
       {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
+        <p style={{ color: "green" }}>Sửa nhân viên thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
+        <p style={{ color: "red" }}>Sửa nhân viên không thành công!</p>
       )}
     </Container>
   );
 };
 
-export default AddEmployee;
+export default EditEmployee;
