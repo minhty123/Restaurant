@@ -158,7 +158,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const Customer = () => {
+const Employee = () => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("e_address");
   const [selected, setSelected] = React.useState([]);
@@ -458,4 +458,4 @@ const Customer = () => {
   );
 };
 
-export default Customer;
+export default Employee;

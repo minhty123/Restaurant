@@ -1,4 +1,10 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { Modal } from "@mui/material";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -20,35 +26,8 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
+
 import { visuallyHidden } from "@mui/utils";
-
-function createData(id, name, calories, fat, carbs, protein) {
-  return {
-    id,
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-const rows = [
-  createData(1, "Cupcake", 305, 3.7, 67, 4.3),
-  createData(2, "Donut", 452, 25.0, 51, 4.9),
-  createData(3, "Eclair", 262, 16.0, 24, 6.0),
-  createData(4, "Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData(5, "Gingerbread", 356, 16.0, 49, 3.9),
-  createData(6, "Honeycomb", 408, 3.2, 87, 6.5),
-  createData(7, "Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData(8, "Jelly Bean", 375, 0.0, 94, 0.0),
-  createData(9, "KitKat", 518, 26.0, 65, 7.0),
-  createData(10, "Lollipop", 392, 0.2, 98, 0.0),
-  createData(11, "Marshmallow", 318, 0, 81, 2.0),
-  createData(12, "Nougat", 360, 19.0, 9, 37.0),
-  createData(13, "Oreo", 437, 18.0, 63, 4.0),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -66,10 +45,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -84,34 +59,40 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "m_name",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "Tên món",
   },
   {
-    id: "calories",
-    numeric: true,
+    id: "price",
+    numeric: false,
     disablePadding: false,
-    label: "Calories",
+    label: "Giá",
   },
   {
-    id: "fat",
-    numeric: true,
+    id: "category",
+    numeric: false,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "Loại",
   },
   {
-    id: "carbs",
-    numeric: true,
+    id: "describe",
+    numeric: false,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "Mô tả",
   },
   {
-    id: "protein",
-    numeric: true,
+    id: "status",
+    numeric: false,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "Trạng thái",
+  },
+  {
+    id: "Action",
+    numeric: false,
+    disablePadding: false,
+    label: "Action",
   },
 ];
 
@@ -177,73 +158,97 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
-
-  return (
-    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Nutrition
-          </Typography>
-        )}
-
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-    </Container>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-export default function EnhancedTable() {
+const Menu = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("m_name");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [menuId, setMenuId] = useState("");
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = (e) => {
+    setShow(true);
+    setMenuId(e);
+  };
+  const [menus, setMenus] = useState([]);
+
+  function EnhancedTableToolbar(props) {
+    const { numSelected } = props;
+
+    return (
+      <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...(numSelected > 0 && {
+              bgcolor: (theme) =>
+                alpha(
+                  theme.palette.primary.main,
+                  theme.palette.action.activatedOpacity
+                ),
+            }),
+          }}
+        >
+          {numSelected > 0 ? (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              color="inherit"
+              variant="subtitle1"
+              component="div"
+            >
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              variant="h6"
+              id="tableTitle"
+              component="div"
+            >
+              Danh sách Món
+            </Typography>
+          )}
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Create">
+              <IconButton component={Link} to="/menus/create">
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Toolbar>
+      </Container>
+    );
+  }
+
+  EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+  };
+
+  async function getMenus() {
+    const res = await axios.get("http://localhost:8000/menus");
+    setMenus(res.data.menu);
+  }
+  useEffect(() => {
+    getMenus();
+  }, []);
+  async function deleteMenu() {
+    await axios.delete("http://localhost:8000/menus/" + menuId);
+    handleClose();
+    window.location.reload();
+  }
+  const editMenu = (e) => {
+    navigate("/menus/" + e);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -253,7 +258,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = menus.map((m) => m._id);
       setSelected(newSelected);
       return;
     }
@@ -296,19 +301,21 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - menus.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(menus, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [menus, order, orderBy, page, rowsPerPage]
   );
 
+  //   //bảng hiện thị
+
   return (
-    <Container maxWidth="xxl" sx={{ mt: 6, mb: 6 }}>
+    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -324,21 +331,21 @@ export default function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={menus.length}
               />
               <TableBody>
-                {visibleRows.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                {visibleRows.map((menu, index) => {
+                  const isItemSelected = isSelected(menu._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, menu._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={menu._id}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                     >
@@ -357,12 +364,28 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {menu.m_name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="left">{menu.price}</TableCell>
+                      <TableCell align="left">{menu.category}</TableCell>
+                      <TableCell align="left">{menu.describe}</TableCell>
+                      <TableCell align="left">{menu.status}</TableCell>
+                      <TableCell align="left">
+                        <Button
+                          className="edit-delete"
+                          onClick={() => {
+                            editMenu(`${menu.slug}`);
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>{" "}
+                        <IconButton
+                          className="edit-delete"
+                          onClick={() => handleShow(`${menu._id}`)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -381,7 +404,7 @@ export default function EnhancedTable() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={rows.length}
+            count={menus.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -393,6 +416,46 @@ export default function EnhancedTable() {
           label="Dense padding"
         />
       </Box>
+      <Modal
+        open={show}
+        onClose={handleClose}
+        disableBackdropClick
+        disableEscapeKeyDown
+      >
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 2,
+            width: 400,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Wait!
+          </Typography>
+          <Typography variant="body1" component="p">
+            Are you sure you want to delete this menu?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button variant="contained" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={deleteMenu}
+              sx={{ ml: 2 }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
-}
+};
+
+export default Menu;
