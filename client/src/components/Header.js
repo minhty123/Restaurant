@@ -47,11 +47,11 @@ const Header = () => {
             </Link>
 
             <Link
-              to="/customers"
+              to="/orders"
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
-              Customers
+              Orders
             </Link>
 
             <Link
@@ -92,32 +92,32 @@ const Header = () => {
             Home
           </Link>
           <Link
-            to="/dishes"
+            to="/employees"
             className="hover:text-brightColor transition-all cursor-pointer"
             onClick={closeMenu}
           >
-            Dishes
+            Employees
           </Link>
           <Link
-            to="/about"
+            to="/orders"
             className="hover:text-brightColor transition-allcursor-pointer"
             onClick={closeMenu}
           >
-            About
+            Orders
           </Link>
           <Link
-            to="/menu"
+            to="/tables"
+            className="hover:text-brightColor transition-all cursor-pointer"
+            onClick={closeMenu}
+          >
+            Tables
+          </Link>
+          <Link
+            to="/menus"
             className="hover:text-brightColor transition-all cursor-pointer"
             onClick={closeMenu}
           >
             Menu
-          </Link>
-          <Link
-            to="/review"
-            className="hover:text-brightColor transition-all cursor-pointer"
-            onClick={closeMenu}
-          >
-            Reviews
           </Link>
 
           <Button title="Login" />

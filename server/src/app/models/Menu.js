@@ -4,9 +4,8 @@ const slug = require('mongoose-slug-generator');
 const MenuSchema = new mongoose.Schema(
   {
     m_name: { type: String, required: true },
-    description: { type: String, required: true },
     describe: { type: String, required: true },
-    price: { type: Number, required: false },
+    price: { type: Number, required: true },
     category: { type: String, required: true },
     unit: { type: String, required: true },
     image: { type: String, required: true },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -9,11 +9,13 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const AddMenu = () => {
+const EditMenu = (props) => {
+  const [menu, setMenu] = useState({});
+  const { slug } = useParams();
   const [name, setName] = useState("");
   const [describe, setDescribe] = useState("");
   const [price, setPrice] = useState("");
@@ -25,48 +27,51 @@ const AddMenu = () => {
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newMenu = {
-      m_name: name,
-      describe: describe,
-      price: price,
-      category: category,
-      unit: unit,
-      image: image,
-      status: status,
-    };
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/menus/create",
+  async function handleSubmitEdit(e) {
+    const check = e.currentTarget;
+    if (check.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      e.preventDefault();
+      const form = e.target;
+      const newMenu = {
+        m_name: name,
+        describe: describe,
+        price: price,
+        category: category,
+        unit: unit,
+        image: image,
+        status: status,
+      };
+      const res = await axios.put(
+        "http://localhost:8000/menus/" + slug,
         newMenu
       );
       setNoti(res.status);
       setCheckSuccess(true);
-      // Reset the form
-      setName("");
-      setDescribe("");
-      setPrice("");
-      setCategory("");
-      setUnit("");
-      setImage("");
-      setStatus("");
-    } catch (error) {
-      console.error(error);
     }
     setValidated(true);
-  };
+  }
+  async function getMenu() {
+    if (props.type === "edit") {
+      const res = await axios.get("http://localhost:8000/menus/" + slug);
+      setMenu(res.data.employee);
+    }
+  }
+  useEffect(() => {
+    getMenu();
+  }, []);
 
   const handleChange = (event) => {
     setCategory(event.target.value);
-    setUnit(event.target.value);
   };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Thêm thông tin Thực đơn</h2>
+      <h2>Sửa thông tin Món</h2>
       <br />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitEdit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
             type="text"
@@ -117,15 +122,11 @@ const AddMenu = () => {
               id="unit-select"
               value={unit}
               label="Đơn vị"
-              onChange={handleChange}
+              onChange={(e) => setUnit(e.target.value)}
             >
-              <MenuItem value={"Món Chính"}>Món Chính</MenuItem>
-              <MenuItem value={"Món Khai Vị"}>Món Khai Vị</MenuItem>
-              <MenuItem value={"Món Tráng Miệng"}>Món Tráng Miệng</MenuItem>
-              <MenuItem value={"Món Ăn Chay"}>Món Ăn Chay</MenuItem>
-              <MenuItem value={"Món Ăn Truyền Thống"}>
-                Món Ăn Truyền Thống
-              </MenuItem>
+              <MenuItem value={"Ly"}>Ly</MenuItem>
+              <MenuItem value={"Đĩa"}>Đĩa</MenuItem>
+              <MenuItem value={"Phần"}>Phần</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -164,18 +165,18 @@ const AddMenu = () => {
         </Stack>
 
         <Button variant="outlined" color="secondary" type="submit">
-          Thêm
+          Sửa
         </Button>
       </form>
 
       {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Thêm Món thành công!</p>
+        <p style={{ color: "green" }}>Sửa Món thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Thêm Món không thành công!</p>
+        <p style={{ color: "red" }}>Sửa Món không thành công!</p>
       )}
     </Container>
   );
 };
 
-export default AddMenu;
+export default EditMenu;
