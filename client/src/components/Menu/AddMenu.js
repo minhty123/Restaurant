@@ -9,11 +9,10 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const AddMenu = () => {
+const AddEmployee = () => {
   const [name, setName] = useState("");
   const [describe, setDescribe] = useState("");
   const [price, setPrice] = useState("");
@@ -59,12 +58,11 @@ const AddMenu = () => {
 
   const handleChange = (event) => {
     setCategory(event.target.value);
-    setUnit(event.target.value);
   };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Thêm thông tin Thực đơn</h2>
+      <h2>Thêm thông tin Nhân Viên</h2>
       <br />
       <form onSubmit={handleSubmit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -94,6 +92,7 @@ const AddMenu = () => {
               <MenuItem value={"Món Ăn Truyền Thống"}>
                 Món Ăn Truyền Thống
               </MenuItem>
+              <MenuItem value={"Đồ Uống"}>Đồ Uống</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -117,15 +116,11 @@ const AddMenu = () => {
               id="unit-select"
               value={unit}
               label="Đơn vị"
-              onChange={handleChange}
+              onChange={(e) => setUnit(e.target.value)}
             >
-              <MenuItem value={"Món Chính"}>Món Chính</MenuItem>
-              <MenuItem value={"Món Khai Vị"}>Món Khai Vị</MenuItem>
-              <MenuItem value={"Món Tráng Miệng"}>Món Tráng Miệng</MenuItem>
-              <MenuItem value={"Món Ăn Chay"}>Món Ăn Chay</MenuItem>
-              <MenuItem value={"Món Ăn Truyền Thống"}>
-                Món Ăn Truyền Thống
-              </MenuItem>
+              <MenuItem value={"Phần"}>Món Chính</MenuItem>
+              <MenuItem value={"Đĩa"}>Món Khai Vị</MenuItem>
+              <MenuItem value={"Ly"}>Món Tráng Miệng</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -169,13 +164,13 @@ const AddMenu = () => {
       </form>
 
       {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Thêm Món thành công!</p>
+        <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Thêm Món không thành công!</p>
+        <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
       )}
     </Container>
   );
 };
 
-export default AddMenu;
+export default AddEmployee;

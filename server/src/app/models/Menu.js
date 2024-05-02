@@ -10,7 +10,7 @@ const MenuSchema = new mongoose.Schema(
     unit: { type: String, required: true },
     image: { type: String, required: true },
     status: { type: String, required: true },
-    slug: { type: String, slug: 'name', unique: true }
+    slug: { type: String, slug: 'm_name', unique: true }
   },
   {
     timestamps: true

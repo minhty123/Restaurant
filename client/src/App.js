@@ -8,6 +8,7 @@ import ViewCustomer from "./pages/Customer/ViewCustomer";
 import ViewAddCustomer from "./pages/Customer/ViewAddCustomer";
 import ViewAddEmployee from "./pages/Employee/ViewAddEmployee";
 import ViewEditEmployee from "./pages/Employee/ViewEditEmployee";
+import ViewEditMenu from "./pages/Menu/ViewEditMenu";
 import ViewEmployees from "./pages/Employee/ViewEmployee";
 import ViewAddMenu from "./pages/Menu/ViewAddMenu";
 import ViewMenu from "./pages/Menu/ViewMenu";
@@ -24,6 +25,7 @@ function App() {
           <Route path="/employees/create" element={<ViewAddEmployee />} />
           <Route path="/menus/create" element={<ViewAddMenu />} />
           <Route path="/employees/:slug" element={<ViewEditEmployee />} />
+          <Route path="/menus/:slug" element={<ViewEditMenu />} />
           <Route path="/employees" element={<ViewEmployees />} />
           <Route path="/tables" element={<ViewTable />} />
           <Route path="/menus" element={<ViewMenu />} />

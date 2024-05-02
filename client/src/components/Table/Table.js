@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { Modal } from "@mui/material";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -21,7 +26,7 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
+
 import { visuallyHidden } from "@mui/utils";
 
 function descendingComparator(a, b, orderBy) {
@@ -57,19 +62,25 @@ const headCells = [
     id: "type",
     numeric: false,
     disablePadding: true,
-    label: "Loại",
+    label: "Loại bàn",
   },
   {
     id: "capacity",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "Số ghế",
   },
   {
     id: "status",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
-    label: "Status",
+    label: "Trạng thái",
+  },
+  {
+    id: "Action",
+    numeric: false,
+    disablePadding: false,
+    label: "Action",
   },
 ];
 
@@ -135,75 +146,82 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+const Menu = () => {
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("type");
+  const [selected, setSelected] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [tableId, setTableId] = useState("");
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = (e) => {
+    setShow(true);
+    setTableId(e);
+  };
+  const [tables, setTables] = useState([]);
 
-  return (
-    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Danh sách Bàn
-          </Typography>
-        )}
+  function EnhancedTableToolbar(props) {
+    const { numSelected } = props;
 
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-    </Container>
-  );
-}
+    return (
+      <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...(numSelected > 0 && {
+              bgcolor: (theme) =>
+                alpha(
+                  theme.palette.primary.main,
+                  theme.palette.action.activatedOpacity
+                ),
+            }),
+          }}
+        >
+          {numSelected > 0 ? (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              color="inherit"
+              variant="subtitle1"
+              component="div"
+            >
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              variant="h6"
+              id="tableTitle"
+              component="div"
+            >
+              Danh sách Bàn
+            </Typography>
+          )}
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Create">
+              <IconButton component={Link} to="/tables/create">
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Toolbar>
+      </Container>
+    );
+  }
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
+  EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+  };
 
-export default function EnhancedTable() {
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("type");
-  const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const [tables, setTables] = React.useState([]);
   async function getTables() {
     const res = await axios.get("http://localhost:8000/tables");
     setTables(res.data.table);
@@ -211,6 +229,14 @@ export default function EnhancedTable() {
   useEffect(() => {
     getTables();
   }, []);
+  async function deleteTable() {
+    await axios.delete("http://localhost:8000/tables/" + tableId);
+    handleClose();
+    window.location.reload();
+  }
+  const editTable = (e) => {
+    navigate("/tables/" + e);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -274,8 +300,10 @@ export default function EnhancedTable() {
     [tables, order, orderBy, page, rowsPerPage]
   );
 
+  //   //bảng hiện thị
+
   return (
-    <Container maxWidth="xxl" sx={{ mt: 6, mb: 6 }}>
+    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -326,8 +354,24 @@ export default function EnhancedTable() {
                       >
                         {table.type}
                       </TableCell>
-                      <TableCell align="right">{table.capacity}</TableCell>
-                      <TableCell align="right">{table.status}</TableCell>
+                      <TableCell align="left">{table.capacity}</TableCell>
+                      <TableCell align="left">{table.status}</TableCell>
+                      <TableCell align="left">
+                        <Button
+                          className="edit-delete"
+                          onClick={() => {
+                            editTable(`${table.slug}`);
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>{" "}
+                        <IconButton
+                          className="edit-delete"
+                          onClick={() => handleShow(`${table._id}`)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -358,6 +402,46 @@ export default function EnhancedTable() {
           label="Dense padding"
         />
       </Box>
+      <Modal
+        open={show}
+        onClose={handleClose}
+        disableBackdropClick
+        disableEscapeKeyDown
+      >
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 2,
+            width: 400,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Wait!
+          </Typography>
+          <Typography variant="body1" component="p">
+            Are you sure you want to delete this menu?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button variant="contained" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={deleteTable}
+              sx={{ ml: 2 }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
-}
+};
+
+export default Menu;
