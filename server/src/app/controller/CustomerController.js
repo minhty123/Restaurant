@@ -33,6 +33,7 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
+  
   //[PUT] /customers
   async edit(req, res) {
     Customer.findOneAndUpdate({ slug: req.params.slug }, req.body, {

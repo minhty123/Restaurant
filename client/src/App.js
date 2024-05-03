@@ -7,12 +7,13 @@ import ViewHome from "./pages/ViewHome";
 import ViewCustomer from "./pages/Customer/ViewCustomer";
 import ViewAddCustomer from "./pages/Customer/ViewAddCustomer";
 import ViewAddEmployee from "./pages/Employee/ViewAddEmployee";
+import ViewAddTable from "./pages/Table/ViewAddTable";
 import ViewEditEmployee from "./pages/Employee/ViewEditEmployee";
 import ViewEditMenu from "./pages/Menu/ViewEditMenu";
 import ViewEmployees from "./pages/Employee/ViewEmployee";
 import ViewAddMenu from "./pages/Menu/ViewAddMenu";
 import ViewMenu from "./pages/Menu/ViewMenu";
-import ViewTable from "./pages/ViewTable";
+import ViewTable from "./pages/Table/ViewTable";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/customers" element={<ViewCustomer />} />
           <Route path="/customers/create" element={<ViewAddCustomer />} />
           <Route path="/employees/create" element={<ViewAddEmployee />} />
+          <Route path="/tables/create" element={<ViewAddTable />} />
           <Route path="/menus/create" element={<ViewAddMenu />} />
           <Route path="/employees/:slug" element={<ViewEditEmployee />} />
           <Route path="/menus/:slug" element={<ViewEditMenu />} />

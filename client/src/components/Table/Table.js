@@ -59,6 +59,12 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
+    id: "t_name",
+    numeric: false,
+    disablePadding: true,
+    label: "Số bàn",
+  },
+  {
     id: "type",
     numeric: false,
     disablePadding: true,
@@ -352,8 +358,9 @@ const Menu = () => {
                         scope="row"
                         padding="none"
                       >
-                        {table.type}
+                        {table.t_name}
                       </TableCell>
+                      <TableCell align="left">{table.type}</TableCell>
                       <TableCell align="left">{table.capacity}</TableCell>
                       <TableCell align="left">{table.status}</TableCell>
                       <TableCell align="left">

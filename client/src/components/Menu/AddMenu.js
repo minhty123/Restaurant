@@ -24,6 +24,7 @@ const AddEmployee = () => {
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
 
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newMenu = {
@@ -59,6 +60,7 @@ const AddEmployee = () => {
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
+
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>

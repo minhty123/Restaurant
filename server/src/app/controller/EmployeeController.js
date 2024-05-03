@@ -1,4 +1,5 @@
 const Employee = require('../models/Employee');
+const CateTable = require('../models/CateTable')
 
 class EmployeeController {
   //[GET] /employees/
@@ -24,6 +25,7 @@ class EmployeeController {
   //[POST] /employees/create
   async create(req, res) {
     const employee = new Employee(req.body);
+    const categories = await Category.find();
     employee
       .save()
       .then(() => {

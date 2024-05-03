@@ -3,6 +3,7 @@ const router = express.Router();
 const TableController = require('../app/controller/TableController');
 
 router.post('/create', TableController.create);
+router.get('/create', TableController.cate);
 router.put('/:slug', TableController.edit);
 router.delete('/:id', TableController.delete);
 router.get('/:slug', TableController.detail);
