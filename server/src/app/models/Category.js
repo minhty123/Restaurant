@@ -3,13 +3,13 @@ const slug = require('mongoose-slug-generator');
 
 const CategorySchema = new mongoose.Schema(
   {
-    name: { type: String, require: true },
-    describe: { type: String, require: true },
-    slug: { type: String, slug: 'e_name', unique: true }
+    name: { type: String, required: true },
+    describe: { type: String, required: true },
+    slug: { type: String, slug: 'name', unique: true }
   },
   {
     timestamps: true
   }
 );
 mongoose.plugin(slug);
-module.exports = mongoose.model('Employee', CategorySchema);
+module.exports = mongoose.model('Category', CategorySchema);

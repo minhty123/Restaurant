@@ -182,7 +182,7 @@ function EnhancedTableToolbar(props) {
           </Tooltip>
         ) : (
           <Tooltip title="Create">
-            <IconButton component={Link} to="/customers/create">
+            <IconButton component={Link} to="/orders/create">
               <AddIcon />
             </IconButton>
           </Tooltip>

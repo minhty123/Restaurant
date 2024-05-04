@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const AddEmployee = () => {
+const AddMenu = () => {
   const [name, setName] = useState("");
   const [describe, setDescribe] = useState("");
   const [price, setPrice] = useState("");
@@ -24,7 +24,17 @@ const AddEmployee = () => {
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
 
- 
+  const [cates, setCates] = useState([]);
+
+  async function getCates() {
+    const res = await axios.get("http://localhost:8000/menus/create");
+    setCates(res.data.cate);
+    console.log(cates);
+  }
+  useEffect(() => {
+    getCates();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newMenu = {
@@ -61,7 +71,6 @@ const AddEmployee = () => {
     setCategory(event.target.value);
   };
 
-
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
       <h2>Thêm thông tin Nhân Viên</h2>
@@ -79,22 +88,19 @@ const AddEmployee = () => {
             required
           />
           <FormControl fullWidth>
-            <InputLabel id="category-label">Loại món</InputLabel>
+            <InputLabel id="category-label">Loại Món</InputLabel>
             <Select
               labelId="category-label"
               id="category-select"
               value={category}
-              label="Loại món"
+              label="Loại Món"
               onChange={handleChange}
             >
-              <MenuItem value={"Món Chính"}>Món Chính</MenuItem>
-              <MenuItem value={"Món Khai Vị"}>Món Khai Vị</MenuItem>
-              <MenuItem value={"Món Tráng Miệng"}>Món Tráng Miệng</MenuItem>
-              <MenuItem value={"Món Ăn Chay"}>Món Ăn Chay</MenuItem>
-              <MenuItem value={"Món Ăn Truyền Thống"}>
-                Món Ăn Truyền Thống
-              </MenuItem>
-              <MenuItem value={"Đồ Uống"}>Đồ Uống</MenuItem>
+              {cates.map((cate) => (
+                <MenuItem key={cate._id} value={cate.name}>
+                  {cate.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Stack>
@@ -148,16 +154,19 @@ const AddEmployee = () => {
             fullWidth
             required
           />
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Trạng thái"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            fullWidth
-            required
-          />
+          <FormControl fullWidth>
+            <InputLabel id="unit-label">Trạng thái</InputLabel>
+            <Select
+              labelId="unit-label"
+              id="unit-select"
+              value={status}
+              label="Trạng thái"
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <MenuItem value={"Có sẵn"}>Có sẵn</MenuItem>
+              <MenuItem value={"Hết"}>Hết</MenuItem>
+            </Select>
+          </FormControl>
         </Stack>
 
         <Button variant="outlined" color="secondary" type="submit">
@@ -175,4 +184,4 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;
+export default AddMenu;

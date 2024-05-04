@@ -1,5 +1,5 @@
 const Table = require('../models/Table');
-const CateTable = require('../models/CateTable')
+const CateTable = require('../models/CateTable');
 
 class TableController {
   //[GET] /tables/
@@ -25,11 +25,9 @@ class TableController {
   //[POST] /tables/create
   async create(req, res) {
     const table = new Table(req.body);
-    const catetable = new CateTable(req.body); // Tạo một đối tượng Catetable từ dữ liệu trong req.body
 
     try {
       await table.save();
-      await catetable.save(); // Lưu dữ liệu Catetable vào cơ sở dữ liệu
 
       res.status(201).json({ success: true, message: 'Successful' });
     } catch (err) {

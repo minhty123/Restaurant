@@ -374,7 +374,7 @@ const Employee = () => {
                         <Button
                           className="edit-delete"
                           onClick={() => {
-                            editEmployee(`${employee.slug}`);
+                            editEmployee(`edit/${employee.slug}`);
                           }}
                         >
                           <EditIcon />

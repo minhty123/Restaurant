@@ -16,8 +16,8 @@ const AddTable = () => {
   const [name, setName] = useState("");
   const [capacity, setCapacity] = useState("");
   const [type, setType] = useState("");
-  const [reserved, setReserved] = useState("");
-  const [reserved_time, setReserved_time] = useState("");
+  // const [reserved, setReserved] = useState("");
+  // const [reserved_time, setReserved_time] = useState("");
   const [status, setStatus] = useState("");
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
@@ -26,7 +26,7 @@ const AddTable = () => {
 
   async function getCates() {
     const res = await axios.get("http://localhost:8000/tables/create");
-    setCates(res.data.cates);
+    setCates(res.data.catetable);
   }
   useEffect(() => {
     getCates();
@@ -120,29 +120,6 @@ const AddTable = () => {
             </Select>
           </FormControl>
         </Stack>
-
-        {/* <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Đường dẫn hình ảnh"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Trạng thái"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            fullWidth
-            required
-          />
-        </Stack> */}
 
         <Button variant="outlined" color="secondary" type="submit">
           Thêm

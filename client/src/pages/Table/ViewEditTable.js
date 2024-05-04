@@ -1,15 +1,15 @@
 import React from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import EditMenu from "../../components/Menu/EditMenu";
+import EditTable from "../../components/Table/EditTable";
 
-const ViewEditMenu = () => {
+const ViewEditTable = () => {
   return (
     <>
       <Header />
-      <EditMenu type="edit" />
+      <EditTable type="edit" />
       <Footer />
     </>
   );
 };
-export default ViewEditMenu;
+export default ViewEditTable;

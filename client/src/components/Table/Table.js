@@ -241,7 +241,7 @@ const Menu = () => {
     window.location.reload();
   }
   const editTable = (e) => {
-    navigate("/tables/" + e);
+    navigate("/tables" + e);
   };
 
   const handleRequestSort = (event, property) => {
@@ -367,7 +367,7 @@ const Menu = () => {
                         <Button
                           className="edit-delete"
                           onClick={() => {
-                            editTable(`${table.slug}`);
+                            editTable(`/edit/${table.slug}`);
                           }}
                         >
                           <EditIcon />

@@ -26,6 +26,16 @@ const EditMenu = (props) => {
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [cates, setCates] = useState([]);
+
+  async function getCates() {
+    const res = await axios.get("http://localhost:8000/menus/create");
+    setCates(res.data.cate);
+    console.log(cates);
+  }
+  useEffect(() => {
+    getCates();
+  }, []);
 
   async function handleSubmitEdit(e) {
     const check = e.currentTarget;
@@ -84,21 +94,19 @@ const EditMenu = (props) => {
             required
           />
           <FormControl fullWidth>
-            <InputLabel id="category-label">Loại món</InputLabel>
+            <InputLabel id="category-label">Loại Món</InputLabel>
             <Select
               labelId="category-label"
               id="category-select"
               value={category}
-              label="Loại món"
+              label="Loại Món"
               onChange={handleChange}
             >
-              <MenuItem value={"Món Chính"}>Món Chính</MenuItem>
-              <MenuItem value={"Món Khai Vị"}>Món Khai Vị</MenuItem>
-              <MenuItem value={"Món Tráng Miệng"}>Món Tráng Miệng</MenuItem>
-              <MenuItem value={"Món Ăn Chay"}>Món Ăn Chay</MenuItem>
-              <MenuItem value={"Món Ăn Truyền Thống"}>
-                Món Ăn Truyền Thống
-              </MenuItem>
+              {cates.map((cate) => (
+                <MenuItem key={cate._id} value={cate.name}>
+                  {cate.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Stack>

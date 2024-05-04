@@ -45,7 +45,7 @@ const EditEmployee = (props) => {
         salary: salary,
       };
       const res = await axios.put(
-        "http://localhost:8000/employees/" + slug,
+        "http://localhost:8000/employees/edit" + slug,
         newEmployee
       );
       setNoti(res.status);
@@ -55,7 +55,9 @@ const EditEmployee = (props) => {
   }
   async function getEmployee() {
     if (props.type === "edit") {
-      const res = await axios.get("http://localhost:8000/employees/" + slug);
+      const res = await axios.get(
+        "http://localhost:8000/employees/edit" + slug
+      );
       setEmployee(res.data.employee);
     }
   }
@@ -77,7 +79,7 @@ const EditEmployee = (props) => {
             type="text"
             variant="outlined"
             color="secondary"
-            label={employee.e_name}
+            label="Họ và tên"
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
