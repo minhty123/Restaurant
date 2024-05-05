@@ -27,7 +27,7 @@ const AddCustomer = () => {
   const [cates, setCates] = useState([]);
 
   async function getCates() {
-    const res = await axios.get("http://localhost:8000/tables/create");
+    const res = await axios.get("http://localhost:8000/catetable");
     setCates(res.data.catetable);
   }
   useEffect(() => {

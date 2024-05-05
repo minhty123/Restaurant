@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { IconButton } from "@mui/material";
+import { Modal } from "@mui/material";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
@@ -19,6 +21,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -72,6 +75,30 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "phone",
+  },
+  {
+    id: "checkin",
+    numeric: false,
+    disablePadding: true,
+    label: "Checkin",
+  },
+  {
+    id: "o_catetable",
+    numeric: false,
+    disablePadding: false,
+    label: "Loại",
+  },
+  {
+    id: "o_table",
+    numeric: false,
+    disablePadding: false,
+    label: "Mã bàn",
+  },
+  {
+    id: "Action",
+    numeric: false,
+    disablePadding: false,
+    label: "Action",
   },
 ];
 
@@ -182,7 +209,7 @@ function EnhancedTableToolbar(props) {
           </Tooltip>
         ) : (
           <Tooltip title="Create">
-            <IconButton component={Link} to="/orders/create">
+            <IconButton component={Link} to="/customers/create">
               <AddIcon />
             </IconButton>
           </Tooltip>
@@ -208,6 +235,14 @@ const Customer = () => {
   // const handleShow = (e) => {
   //   setShow(true);
   // };
+  const [customerId, setCustomerId] = useState("");
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = (e) => {
+    setShow(true);
+    setCustomerId(e);
+  };
   const [customers, setCustomers] = useState([]);
   async function getCustomers() {
     const res = await axios.get("http://localhost:8000/customers");
@@ -216,6 +251,15 @@ const Customer = () => {
   useEffect(() => {
     getCustomers();
   }, []);
+
+  async function deleteCustomer() {
+    await axios.delete("http://localhost:8000/customers/" + customerId);
+    handleClose();
+    window.location.reload();
+  }
+  const editCustomer = (e) => {
+    navigate("/customers/" + e);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -335,6 +379,25 @@ const Customer = () => {
                       </TableCell>
                       <TableCell align="left">{customer.c_address}</TableCell>
                       <TableCell align="left">{customer.phone}</TableCell>
+                      <TableCell align="left">{customer.checkin}</TableCell>
+                      <TableCell align="left">{customer.o_catetable}</TableCell>
+                      <TableCell align="left">{customer.o_table}</TableCell>
+                      <TableCell align="left">
+                        <Button
+                          className="edit-delete"
+                          onClick={() => {
+                            editCustomer(`edit/${customer.slug}`);
+                          }}
+                        >
+                          <EditIcon />
+                        </Button>{" "}
+                        <IconButton
+                          className="edit-delete"
+                          onClick={() => handleShow(`${customer._id}`)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -365,6 +428,44 @@ const Customer = () => {
           label="Dense padding"
         />
       </Box>
+      <Modal
+        open={show}
+        onClose={handleClose}
+        disableBackdropClick
+        disableEscapeKeyDown
+      >
+        <Box
+          sx={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 2,
+            width: 400,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Wait!
+          </Typography>
+          <Typography variant="body1" component="p">
+            Are you sure you want to delete this partner?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button variant="contained" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={deleteCustomer}
+              sx={{ ml: 2 }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Container>
   );
 };

@@ -47,7 +47,7 @@ const Header = () => {
             </Link>
 
             <Link
-              to="/orders"
+              to="/customers"
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
@@ -99,7 +99,7 @@ const Header = () => {
             Employees
           </Link>
           <Link
-            to="/orders"
+            to="/customers"
             className="hover:text-brightColor transition-allcursor-pointer"
             onClick={closeMenu}
           >

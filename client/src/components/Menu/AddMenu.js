@@ -27,9 +27,8 @@ const AddMenu = () => {
   const [cates, setCates] = useState([]);
 
   async function getCates() {
-    const res = await axios.get("http://localhost:8000/menus/create");
+    const res = await axios.get("http://localhost:8000/categories");
     setCates(res.data.cate);
-    console.log(cates);
   }
   useEffect(() => {
     getCates();

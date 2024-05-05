@@ -45,7 +45,7 @@ const EditEmployee = (props) => {
         salary: salary,
       };
       const res = await axios.put(
-        "http://localhost:8000/employees/edit" + slug,
+        "http://localhost:8000/employees/" + slug,
         newEmployee
       );
       setNoti(res.status);
@@ -55,9 +55,7 @@ const EditEmployee = (props) => {
   }
   async function getEmployee() {
     if (props.type === "edit") {
-      const res = await axios.get(
-        "http://localhost:8000/employees/edit" + slug
-      );
+      const res = await axios.get("http://localhost:8000/employees/" + slug);
       setEmployee(res.data.employee);
     }
   }

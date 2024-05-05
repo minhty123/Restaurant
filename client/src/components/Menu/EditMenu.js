@@ -29,9 +29,8 @@ const EditMenu = (props) => {
   const [cates, setCates] = useState([]);
 
   async function getCates() {
-    const res = await axios.get("http://localhost:8000/menus/create");
+    const res = await axios.get("http://localhost:8000/categories");
     setCates(res.data.cate);
-    console.log(cates);
   }
   useEffect(() => {
     getCates();
@@ -55,7 +54,7 @@ const EditMenu = (props) => {
         status: status,
       };
       const res = await axios.put(
-        "http://localhost:8000/menus/" + slug,
+        "http://localhost:8000/menus/edit" + slug,
         newMenu
       );
       setNoti(res.status);
@@ -65,7 +64,7 @@ const EditMenu = (props) => {
   }
   async function getMenu() {
     if (props.type === "edit") {
-      const res = await axios.get("http://localhost:8000/menus/" + slug);
+      const res = await axios.get("http://localhost:8000/menus/edit" + slug);
       setMenu(res.data.employee);
     }
   }

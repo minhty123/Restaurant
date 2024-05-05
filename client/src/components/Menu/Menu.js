@@ -247,7 +247,7 @@ const Menu = () => {
     window.location.reload();
   }
   const editMenu = (e) => {
-    navigate("/menus/" + e);
+    navigate("/menus/edit/" + e);
   };
 
   const handleRequestSort = (event, property) => {
