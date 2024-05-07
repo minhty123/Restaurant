@@ -5,7 +5,7 @@ const CustomerSchema = new mongoose.Schema(
   {
     c_name: { type: String, required: true },
     c_address: { type: String, required: true },
-    phone: { type: Number, required: false },
+    phone: { type: Number, required: true },
     checkin: { type: Date, required: true },
     checkout: { type: Date, required: true },
     o_catetable: { type: String, required: false },

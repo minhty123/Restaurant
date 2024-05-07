@@ -9,7 +9,6 @@ const EmployeeSchema = new mongoose.Schema(
     birthday: { type: Date, required: true },
     e_address: { type: String, required: true },
     phone: { type: Number, required: true },
-
     salary: { type: Number, required: true },
     slug: { type: String, slug: 'e_name', unique: true }
   },

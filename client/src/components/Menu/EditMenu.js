@@ -54,7 +54,7 @@ const EditMenu = (props) => {
         status: status,
       };
       const res = await axios.put(
-        "http://localhost:8000/menus/edit" + slug,
+        "http://localhost:8000/menus/edit/" + slug,
         newMenu
       );
       setNoti(res.status);

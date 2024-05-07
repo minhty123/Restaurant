@@ -168,9 +168,8 @@ const EditCustomer = (props) => {
           onChange={(e) => setNote(e.target.value)}
           value={note}
           fullWidth
-          required
+          sx={{ marginBottom: 4 }}
         />
-
         <Button variant="outlined" color="secondary" type="submit">
           Thêm
         </Button>

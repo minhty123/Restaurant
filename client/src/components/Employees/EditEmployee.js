@@ -21,7 +21,7 @@ const EditEmployee = (props) => {
   const [birthday, setBirthday] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
   const [salary, setSalary] = useState("");
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
@@ -34,18 +34,19 @@ const EditEmployee = (props) => {
       e.stopPropagation();
     } else {
       e.preventDefault();
-      const form = e.target;
+
       const newEmployee = {
         e_name: name,
+        gender: gender,
         position: position,
         birthday: birthday,
         e_address: address,
         phone: phone,
-        email: email,
+
         salary: salary,
       };
       const res = await axios.put(
-        "http://localhost:8000/employees/" + slug,
+        "http://localhost:8000/employees/edit/" + slug,
         newEmployee
       );
       setNoti(res.status);
@@ -55,7 +56,9 @@ const EditEmployee = (props) => {
   }
   async function getEmployee() {
     if (props.type === "edit") {
-      const res = await axios.get("http://localhost:8000/employees/" + slug);
+      const res = await axios.get(
+        "http://localhost:8000/employees/edit" + slug
+      );
       setEmployee(res.data.employee);
     }
   }
@@ -143,9 +146,9 @@ const EditEmployee = (props) => {
             type="text"
             variant="outlined"
             color="secondary"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            label="Gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
             fullWidth
             required
           />

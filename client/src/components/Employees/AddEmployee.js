@@ -18,7 +18,7 @@ const AddEmployee = () => {
   const [birthday, setBirthday] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
   const [salary, setSalary] = useState("");
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
@@ -28,11 +28,11 @@ const AddEmployee = () => {
     e.preventDefault();
     const newEmployee = {
       e_name: name,
+      gender: gender,
       position: position,
       birthday: birthday,
       e_address: address,
       phone: phone,
-      email: email,
       salary: salary,
     };
     try {
@@ -44,11 +44,11 @@ const AddEmployee = () => {
       setCheckSuccess(true);
       // Reset the form
       setName("");
+      setGender("");
       setPosition("");
       setBirthday("");
       setAddress("");
       setPhone("");
-      setEmail("");
       setSalary("");
     } catch (error) {
       console.error(error);
@@ -136,9 +136,9 @@ const AddEmployee = () => {
             type="text"
             variant="outlined"
             color="secondary"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            label="Giới Tính"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
             fullWidth
             required
           />
@@ -165,8 +165,6 @@ const AddEmployee = () => {
       {validated && !checkSuccess && (
         <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
       )}
-
-      
     </Container>
   );
 };

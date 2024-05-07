@@ -49,7 +49,7 @@ const EditTable = (props) => {
         status: status,
       };
       const res = await axios.put(
-        "http://localhost:8000/tables/edit" + slug,
+        "http://localhost:8000/tables/edit/" + slug,
         newTable
       );
       setNoti(res.status);

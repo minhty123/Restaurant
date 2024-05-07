@@ -8,6 +8,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
 } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -19,6 +20,7 @@ const AddCustomer = () => {
   const [checkout, setCheckout] = useState("");
   const [catetable, setCatetable] = useState("");
   const [note, setNote] = useState("");
+  const [error, setError] = useState("");
 
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
@@ -46,6 +48,12 @@ const AddCustomer = () => {
       o_catetable: catetable,
       note: note,
     };
+    if (checkin > checkout) {
+      setError(
+        "Giá trị của trường 'checkin' phải nhỏ hơn giá trị của trường 'checkout'."
+      );
+      return;
+    }
     try {
       const res = await axios.post(
         "http://localhost:8000/customers/create",
@@ -54,7 +62,13 @@ const AddCustomer = () => {
       setNoti(res.status);
       setCheckSuccess(true);
       // Reset the form
-      form.reset();
+      setName("");
+      setPhone("");
+      setAddress("");
+      setCheckin("");
+      setCheckout("");
+      setCatetable("");
+      setNote("");
     } catch (error) {
       console.error(error);
     }
@@ -62,6 +76,9 @@ const AddCustomer = () => {
   }
   const handleChange = (event) => {
     setCatetable(event.target.value);
+  };
+  const handleCloseSnackbar = () => {
+    setCheckSuccess(false);
   };
 
   return (
@@ -126,7 +143,7 @@ const AddCustomer = () => {
 
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextField
-              type="date"
+              type="datetime-local"
               variant="outlined"
               color="secondary"
               label="Checkin"
@@ -137,7 +154,7 @@ const AddCustomer = () => {
               required
             />
             <TextField
-              type="date"
+              type="datetime-local"
               variant="outlined"
               color="secondary"
               label="Checkout"
@@ -148,6 +165,7 @@ const AddCustomer = () => {
               required
             />
           </Stack>
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <TextField
             type="text"
             variant="outlined"
@@ -157,12 +175,18 @@ const AddCustomer = () => {
             onChange={(e) => setNote(e.target.value)}
             value={note}
             fullWidth
-            required
+            sx={{ marginBottom: 4 }}
           />
 
           <Button variant="outlined" color="secondary" type="submit">
             Thêm
           </Button>
+          <Snackbar
+            open={checkSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSnackbar}
+            message="Thêm thành công"
+          />
         </form>
       </React.Fragment>
     </Container>
