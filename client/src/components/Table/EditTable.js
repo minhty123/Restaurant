@@ -26,8 +26,9 @@ const EditTable = (props) => {
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
   const [cates, setCates] = useState([]);
+  const [error, setError] = useState("");
   async function getCates() {
-    const res = await axios.get("http://localhost:8000/catetable");
+    const res = await axios.get("http://localhost:8000/catetables");
     setCates(res.data.catetable);
   }
   useEffect(() => {
@@ -41,7 +42,12 @@ const EditTable = (props) => {
       e.stopPropagation();
     } else {
       e.preventDefault();
-      const form = e.target;
+
+      if (capacity < 0) {
+        setError("số ghế không được nhỏ hơn 0");
+        return;
+      }
+
       const newTable = {
         t_name: name,
         capacity: capacity,
@@ -116,6 +122,7 @@ const EditTable = (props) => {
             fullWidth
             required
           />
+
           <FormControl fullWidth>
             <InputLabel id="unit-label">Trạng thái</InputLabel>
             <Select
@@ -130,6 +137,7 @@ const EditTable = (props) => {
             </Select>
           </FormControl>
         </Stack>
+        {error && <div className="error">{error}</div>}
 
         <Button variant="outlined" color="secondary" type="submit">
           Thêm

@@ -28,7 +28,7 @@ const EditCustomer = (props) => {
   const [validated, setValidated] = useState(false);
   const [cates, setCates] = useState([]);
   async function getCates() {
-    const res = await axios.get("http://localhost:8000/catetable");
+    const res = await axios.get("http://localhost:8000/catetables");
     setCates(res.data.catetable);
   }
   useEffect(() => {

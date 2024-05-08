@@ -13,29 +13,17 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const EditMenu = (props) => {
-  const [menu, setMenu] = useState({});
+const EditCateTable = (props) => {
+  const [catetable, setCateTable] = useState({});
   const { slug } = useParams();
   const [name, setName] = useState("");
   const [describe, setDescribe] = useState("");
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
   const [unit, setUnit] = useState("");
-  const [image, setImage] = useState("");
-  const [status, setStatus] = useState("");
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
-  const [cates, setCates] = useState([]);
   const [error, setError] = useState("");
-
-  async function getCates() {
-    const res = await axios.get("http://localhost:8000/categories");
-    setCates(res.data.cate);
-  }
-  useEffect(() => {
-    getCates();
-  }, []);
 
   async function handleSubmitEdit(e) {
     const check = e.currentTarget;
@@ -44,23 +32,20 @@ const EditMenu = (props) => {
       e.stopPropagation();
     } else {
       e.preventDefault();
+      // Kiểm tra lương không nhỏ hơn 0
       if (price < 0) {
-        setError("giá không được nhỏ hơn 0");
+        setError("Gía không được nhỏ hơn 0");
         return;
       }
-
-      const newMenu = {
-        m_name: name,
-        describe: describe,
-        price: price,
-        category: category,
+      const newCates = {
+        name: name,
         unit: unit,
-        image: image,
-        status: status,
+        price: price,
+        describe: describe,
       };
       const res = await axios.put(
-        "http://localhost:8000/menus/edit/" + slug,
-        newMenu
+        "http://localhost:8000/catetables/edit/" + slug,
+        newCates
       );
       setNoti(res.status);
       setCheckSuccess(true);
@@ -68,23 +53,21 @@ const EditMenu = (props) => {
     }
     setValidated(true);
   }
-  async function getMenu() {
+  async function getCateTable() {
     if (props.type === "edit") {
-      const res = await axios.get("http://localhost:8000/menus/edit" + slug);
-      setMenu(res.data.employee);
+      const res = await axios.get(
+        "http://localhost:8000/catetables/edit" + slug
+      );
+      setCateTable(res.data.catetable);
     }
   }
   useEffect(() => {
-    getMenu();
+    getCateTable();
   }, []);
-
-  const handleChange = (event) => {
-    setCategory(event.target.value);
-  };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Sửa thông tin Món</h2>
+      <h2>Sửa Không Gian</h2>
       <br />
       <form onSubmit={handleSubmitEdit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -92,41 +75,24 @@ const EditMenu = (props) => {
             type="text"
             variant="outlined"
             color="secondary"
-            label="Tên món"
+            label="Tên Không Gian"
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
             required
           />
-          <FormControl fullWidth>
-            <InputLabel id="category-label">Loại Món</InputLabel>
-            <Select
-              labelId="category-label"
-              id="category-select"
-              value={category}
-              label="Loại Món"
-              onChange={handleChange}
-            >
-              {cates.map((cate) => (
-                <MenuItem key={cate._id} value={cate.name}>
-                  {cate.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <TextField
+            type="text"
+            variant="outlined"
+            color="secondary"
+            label="Mô tả"
+            value={describe}
+            onChange={(e) => setDescribe(e.target.value)}
+            fullWidth
+            required
+          />
         </Stack>
 
-        <TextField
-          type="text"
-          variant="outlined"
-          color="secondary"
-          label="Mô tả"
-          value={describe}
-          onChange={(e) => setDescribe(e.target.value)}
-          fullWidth
-          required
-          sx={{ marginBottom: 4 }}
-        />
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="unit-label">Đơn vị</InputLabel>
@@ -137,13 +103,12 @@ const EditMenu = (props) => {
               label="Đơn vị"
               onChange={(e) => setUnit(e.target.value)}
             >
-              <MenuItem value={"Ly"}>Ly</MenuItem>
-              <MenuItem value={"Đĩa"}>Đĩa</MenuItem>
-              <MenuItem value={"Phần"}>Phần</MenuItem>
+              <MenuItem value={"Bàn"}>Bàn</MenuItem>
+              <MenuItem value={"Chỗ"}>Cái</MenuItem>
             </Select>
           </FormControl>
           <TextField
-            type="text"
+            type="Number"
             variant="outlined"
             color="secondary"
             label="Giá"
@@ -153,32 +118,8 @@ const EditMenu = (props) => {
             required
           />
         </Stack>
-
-        <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Đường dẫn hình ảnh"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            fullWidth
-            required
-          />
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Trạng thái"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            fullWidth
-            required
-          />
-        </Stack>
-
         <Button variant="outlined" color="secondary" type="submit">
-          Sửa
+          Thêm
         </Button>
       </form>
       {error && <div className="error">{error}</div>}
@@ -192,4 +133,4 @@ const EditMenu = (props) => {
   );
 };
 
-export default EditMenu;
+export default EditCateTable;

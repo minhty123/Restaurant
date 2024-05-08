@@ -9,7 +9,7 @@ route = (app) => {
   app.use('/customers', customer);
   app.use('/employees', employee);
   app.use('/categories', category);
-  app.use('/catetable', catetable);
+  app.use('/catetables', catetable);
   app.use('/menus', menu);
   app.use('/tables', table);
 };

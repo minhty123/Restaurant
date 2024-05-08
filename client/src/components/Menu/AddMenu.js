@@ -23,7 +23,7 @@ const AddMenu = () => {
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
-
+  const [error, setError] = useState("");
   const [cates, setCates] = useState([]);
 
   async function getCates() {
@@ -36,6 +36,10 @@ const AddMenu = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (price < 0) {
+      setError("giá không được nhỏ hơn 0");
+      return;
+    }
     const newMenu = {
       m_name: name,
       describe: describe,
@@ -60,6 +64,7 @@ const AddMenu = () => {
       setUnit("");
       setImage("");
       setStatus("");
+      setError("");
     } catch (error) {
       console.error(error);
     }
@@ -172,7 +177,7 @@ const AddMenu = () => {
           Thêm
         </Button>
       </form>
-
+      {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
         <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
       )}

@@ -59,28 +59,22 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "t_name",
-    numeric: false,
-    disablePadding: true,
-    label: "Số bàn",
-  },
-  {
-    id: "type",
+    id: "name",
     numeric: false,
     disablePadding: true,
     label: "Loại bàn",
   },
   {
-    id: "capacity",
+    id: "price",
     numeric: false,
     disablePadding: false,
-    label: "Số ghế",
+    label: "Giá",
   },
   {
-    id: "status",
+    id: "describe",
     numeric: false,
     disablePadding: false,
-    label: "Trạng thái",
+    label: "Mô tả",
   },
   {
     id: "Action",
@@ -152,22 +146,22 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const ViewTable = () => {
+const Menu = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("type");
+  const [orderBy, setOrderBy] = React.useState("name");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [tableId, setTableId] = useState("");
+  const [catetableId, setCateTableId] = useState("");
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = (e) => {
     setShow(true);
-    setTableId(e);
+    setCateTableId(e);
   };
-  const [tables, setTables] = useState([]);
+  const [catetables, setCateTables] = useState([]);
 
   function EnhancedTableToolbar(props) {
     const { numSelected } = props;
@@ -214,7 +208,7 @@ const ViewTable = () => {
             </Tooltip>
           ) : (
             <Tooltip title="Create">
-              <IconButton component={Link} to="/tables/create">
+              <IconButton component={Link} to="/catetables/create">
                 <AddIcon />
               </IconButton>
             </Tooltip>
@@ -228,20 +222,20 @@ const ViewTable = () => {
     numSelected: PropTypes.number.isRequired,
   };
 
-  async function getTables() {
-    const res = await axios.get("http://localhost:8000/tables");
-    setTables(res.data.table);
+  async function getCateTables() {
+    const res = await axios.get("http://localhost:8000/catetables");
+    setCateTables(res.data.catetable);
   }
   useEffect(() => {
-    getTables();
+    getCateTables();
   }, []);
-  async function deleteTable() {
-    await axios.delete("http://localhost:8000/tables/" + tableId);
+  async function deleteCateTable() {
+    await axios.delete("http://localhost:8000/catetables/" + catetableId);
     handleClose();
     window.location.reload();
   }
-  const editTable = (e) => {
-    navigate("/tables" + e);
+  const editCateTable = (e) => {
+    navigate("/catetables" + e);
   };
 
   const handleRequestSort = (event, property) => {
@@ -252,7 +246,7 @@ const ViewTable = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = tables.map((t) => t._id);
+      const newSelected = catetables.map((t) => t._id);
       setSelected(newSelected);
       return;
     }
@@ -295,15 +289,15 @@ const ViewTable = () => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tables.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - catetables.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(tables, getComparator(order, orderBy)).slice(
+      stableSort(catetables, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [tables, order, orderBy, page, rowsPerPage]
+    [catetables, order, orderBy, page, rowsPerPage]
   );
 
   //   //bảng hiện thị
@@ -325,21 +319,21 @@ const ViewTable = () => {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={tables.length}
+                rowCount={catetables.length}
               />
               <TableBody>
-                {visibleRows.map((table, index) => {
-                  const isItemSelected = isSelected(table._id);
+                {visibleRows.map((catetable, index) => {
+                  const isItemSelected = isSelected(catetable._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, table._id)}
+                      onClick={(event) => handleClick(event, catetable._id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={table._id}
+                      key={catetable._id}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                     >
@@ -358,23 +352,22 @@ const ViewTable = () => {
                         scope="row"
                         padding="none"
                       >
-                        {table.t_name}
+                        {catetable.name}
                       </TableCell>
-                      <TableCell align="left">{table.type}</TableCell>
-                      <TableCell align="left">{table.capacity}</TableCell>
-                      <TableCell align="left">{table.status}</TableCell>
+                      <TableCell align="left">{catetable.price}</TableCell>
+                      <TableCell align="left">{catetable.describe}</TableCell>
                       <TableCell align="left">
                         <Button
                           className="edit-delete"
                           onClick={() => {
-                            editTable(`/edit/${table.slug}`);
+                            editCateTable(`/edit/${catetable.slug}`);
                           }}
                         >
                           <EditIcon />
                         </Button>{" "}
                         <IconButton
                           className="edit-delete"
-                          onClick={() => handleShow(`${table._id}`)}
+                          onClick={() => handleShow(`${catetable._id}`)}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -397,7 +390,7 @@ const ViewTable = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={tables.length}
+            count={catetables.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -439,7 +432,7 @@ const ViewTable = () => {
             <Button
               variant="contained"
               color="error"
-              onClick={deleteTable}
+              onClick={deleteCateTable}
               sx={{ ml: 2 }}
             >
               Confirm
@@ -451,4 +444,4 @@ const ViewTable = () => {
   );
 };
 
-export default ViewTable;
+export default Menu;

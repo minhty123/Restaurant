@@ -26,6 +26,7 @@ const EditEmployee = (props) => {
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSubmitEdit(e) {
     const check = e.currentTarget;
@@ -35,6 +36,27 @@ const EditEmployee = (props) => {
     } else {
       e.preventDefault();
 
+      // Kiểm tra số điện thoại có 10 số
+      if (phone.length !== 10) {
+        setError("Số điện thoại phải có 10 số");
+        return;
+      }
+
+      // Kiểm tra ngày sinh không lớn hơn hiện tại và đủ 18 tuổi trở lên
+      const currentDate = new Date();
+      const selectedDate = new Date(birthday);
+      const minAgeDate = new Date();
+      minAgeDate.setFullYear(minAgeDate.getFullYear() - 18);
+      if (selectedDate >= currentDate || selectedDate > minAgeDate) {
+        setError("Không đủ tuổi");
+        return;
+      }
+
+      // Kiểm tra lương không nhỏ hơn 0
+      if (salary < 0) {
+        setError("Lương không được nhỏ hơn 0");
+        return;
+      }
       const newEmployee = {
         e_name: name,
         gender: gender,
@@ -42,7 +64,6 @@ const EditEmployee = (props) => {
         birthday: birthday,
         e_address: address,
         phone: phone,
-
         salary: salary,
       };
       const res = await axios.put(
@@ -51,6 +72,7 @@ const EditEmployee = (props) => {
       );
       setNoti(res.status);
       setCheckSuccess(true);
+      setError("");
     }
     setValidated(true);
   }
@@ -142,16 +164,19 @@ const EditEmployee = (props) => {
         />
 
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Gender"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            fullWidth
-            required
-          />
+          <FormControl fullWidth>
+            <InputLabel id="gender-label">Giới tính</InputLabel>
+            <Select
+              labelId="gender-label"
+              id="gender-select"
+              value={gender}
+              label="Giới tính"
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <MenuItem value={"Nam"}>Nam</MenuItem>
+              <MenuItem value={"Nữ"}>Nữ</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             type="text"
             variant="outlined"
@@ -168,7 +193,7 @@ const EditEmployee = (props) => {
           Sửa
         </Button>
       </form>
-
+      {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
         <p style={{ color: "green" }}>Sửa nhân viên thành công!</p>
       )}

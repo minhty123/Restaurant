@@ -32,18 +32,18 @@ const Header = () => {
 
           <nav className="hidden md:flex flex-row items-center text-lg font-medium gap-8">
             <Link
-              to="/"
+              to="/menus"
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
-              Home
+              Thực Đơn
             </Link>
             <Link
               to="/employees"
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
-              Employees
+              Nhân Viên
             </Link>
 
             <Link
@@ -59,15 +59,16 @@ const Header = () => {
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
-              Tables
+              Bàn
             </Link>
             <Link
-              to="/menus"
+              to="/catetables"
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
-              Menu
+              Không gian
             </Link>
+
             <Button title="Login" />
           </nav>
 

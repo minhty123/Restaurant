@@ -65,6 +65,12 @@ const headCells = [
     label: "name",
   },
   {
+    id: "gender",
+    numeric: false,
+    disablePadding: false,
+    label: "Giới tính",
+  },
+  {
     id: "position",
     numeric: false,
     disablePadding: false,
@@ -76,12 +82,7 @@ const headCells = [
     disablePadding: false,
     label: "address",
   },
-  {
-    id: "email",
-    numeric: false,
-    disablePadding: false,
-    label: "email",
-  },
+
   {
     id: "phone",
     numeric: false,
@@ -89,10 +90,10 @@ const headCells = [
     label: "phone",
   },
   {
-    id: "status",
+    id: "Action",
     numeric: false,
     disablePadding: false,
-    label: "status",
+    label: "Action",
   },
 ];
 
@@ -366,9 +367,10 @@ const Employee = () => {
                       >
                         {employee.e_name}
                       </TableCell>
+                      <TableCell align="left">{employee.gender}</TableCell>
                       <TableCell align="left">{employee.position}</TableCell>
                       <TableCell align="left">{employee.e_address}</TableCell>
-                      <TableCell align="left">{employee.email}</TableCell>
+
                       <TableCell align="left">{employee.phone}</TableCell>
                       <TableCell align="left">
                         <Button

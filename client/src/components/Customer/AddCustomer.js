@@ -29,7 +29,7 @@ const AddCustomer = () => {
   const [cates, setCates] = useState([]);
 
   async function getCates() {
-    const res = await axios.get("http://localhost:8000/catetable");
+    const res = await axios.get("http://localhost:8000/catetables");
     setCates(res.data.catetable);
   }
   useEffect(() => {
@@ -38,7 +38,18 @@ const AddCustomer = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const form = e.target;
+    //checkin phải nhỏ hơn checkout
+    if (checkin > checkout) {
+      setError(
+        "Giá trị của trường 'checkin' phải nhỏ hơn giá trị của trường 'checkout'."
+      );
+      return;
+    }
+    //sdt phải đủ 10 số
+    if (phone.length !== 10) {
+      setError("Số điện thoại phải có 10 số");
+      return;
+    }
     const newCustomer = {
       c_name: name,
       c_address: address,
@@ -48,12 +59,7 @@ const AddCustomer = () => {
       o_catetable: catetable,
       note: note,
     };
-    if (checkin > checkout) {
-      setError(
-        "Giá trị của trường 'checkin' phải nhỏ hơn giá trị của trường 'checkout'."
-      );
-      return;
-    }
+
     try {
       const res = await axios.post(
         "http://localhost:8000/customers/create",
@@ -69,6 +75,7 @@ const AddCustomer = () => {
       setCheckout("");
       setCatetable("");
       setNote("");
+      setError("");
     } catch (error) {
       console.error(error);
     }
@@ -165,7 +172,7 @@ const AddCustomer = () => {
               required
             />
           </Stack>
-          {error && <p style={{ color: "red" }}>{error}</p>}
+
           <TextField
             type="text"
             variant="outlined"
@@ -177,7 +184,7 @@ const AddCustomer = () => {
             fullWidth
             sx={{ marginBottom: 4 }}
           />
-
+          {error && <div className="error">{error}</div>}
           <Button variant="outlined" color="secondary" type="submit">
             Thêm
           </Button>
