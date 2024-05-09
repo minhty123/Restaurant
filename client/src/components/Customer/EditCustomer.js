@@ -21,12 +21,14 @@ const EditCustomer = (props) => {
   const [address, setAddress] = useState("");
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
+  const [amount, setAmount] = useState("");
   const [catetable, setCatetable] = useState("");
   const [note, setNote] = useState("");
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
   const [cates, setCates] = useState([]);
+  const [error, setError] = useState("");
   async function getCates() {
     const res = await axios.get("http://localhost:8000/catetables");
     setCates(res.data.catetable);
@@ -42,13 +44,29 @@ const EditCustomer = (props) => {
       e.stopPropagation();
     } else {
       e.preventDefault();
-      const form = e.target;
+      //sdt phải đủ 10 số
+      if (phone.length !== 10) {
+        setError("Số điện thoại phải có 10 số");
+        return;
+      }
+      //số lượng >0
+      if (amount < 0) {
+        setError("lượng khách phải lớn hơn 0");
+        return;
+      }
+      //checkin phải nhỏ hơn checkout
+      if (checkin > checkout) {
+        setError("checkin phải nhỏ hơn checkout.");
+        return;
+      }
+
       const newCustomer = {
         c_name: name,
         c_address: address,
         phone: phone,
         checkin: checkin,
         checkout: checkout,
+        amount: amount,
         o_catetable: catetable,
         note: note,
       };
@@ -58,6 +76,7 @@ const EditCustomer = (props) => {
       );
       setNoti(res.status);
       setCheckSuccess(true);
+      setError("");
     }
     setValidated(true);
   }
@@ -105,15 +124,27 @@ const EditCustomer = (props) => {
             required
           />
         </Stack>
+        <TextField
+          type="text"
+          variant="outlined"
+          color="secondary"
+          label="Địa chỉ"
+          name="address"
+          onChange={(e) => setAddress(e.target.value)}
+          value={address}
+          fullWidth
+          required
+          sx={{ marginBottom: 4 }}
+        />
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
-            label="Địa chỉ"
-            name="address"
-            onChange={(e) => setAddress(e.target.value)}
-            value={address}
+            label="Số lượng"
+            name="amount"
+            onChange={(e) => setAmount(e.target.value)}
+            value={amount}
             fullWidth
             required
           />
@@ -174,7 +205,7 @@ const EditCustomer = (props) => {
           Thêm
         </Button>
       </form>
-
+      {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
         <p style={{ color: "green" }}>Sửa Món thành công!</p>
       )}

@@ -18,6 +18,7 @@ const AddCustomer = () => {
   const [address, setAddress] = useState("");
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
+  const [amount, setAmount] = useState("");
   const [catetable, setCatetable] = useState("");
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -38,24 +39,29 @@ const AddCustomer = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    //checkin phải nhỏ hơn checkout
-    if (checkin > checkout) {
-      setError(
-        "Giá trị của trường 'checkin' phải nhỏ hơn giá trị của trường 'checkout'."
-      );
-      return;
-    }
     //sdt phải đủ 10 số
     if (phone.length !== 10) {
       setError("Số điện thoại phải có 10 số");
       return;
     }
+    //số lượng >0
+    if (amount < 0) {
+      setError("lượng khách phải lớn hơn 0");
+      return;
+    }
+    //checkin phải nhỏ hơn checkout
+    if (checkin > checkout) {
+      setError("checkin phải nhỏ hơn checkout.");
+      return;
+    }
+
     const newCustomer = {
       c_name: name,
       c_address: address,
       phone: phone,
       checkin: checkin,
       checkout: checkout,
+      amount: amount,
       o_catetable: catetable,
       note: note,
     };
@@ -73,6 +79,7 @@ const AddCustomer = () => {
       setAddress("");
       setCheckin("");
       setCheckout("");
+      setAmount("");
       setCatetable("");
       setNote("");
       setError("");
@@ -83,9 +90,6 @@ const AddCustomer = () => {
   }
   const handleChange = (event) => {
     setCatetable(event.target.value);
-  };
-  const handleCloseSnackbar = () => {
-    setCheckSuccess(false);
   };
 
   return (
@@ -118,15 +122,27 @@ const AddCustomer = () => {
               required
             />
           </Stack>
+          <TextField
+            type="text"
+            variant="outlined"
+            color="secondary"
+            label="Địa chỉ"
+            name="address"
+            onChange={(e) => setAddress(e.target.value)}
+            value={address}
+            fullWidth
+            required
+            sx={{ marginBottom: 4 }}
+          />
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextField
-              type="text"
+              type="number"
               variant="outlined"
               color="secondary"
-              label="Địa chỉ"
-              name="address"
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
+              label="Số lượng"
+              name="amount"
+              onChange={(e) => setAmount(e.target.value)}
+              value={amount}
               fullWidth
               required
             />
@@ -188,12 +204,6 @@ const AddCustomer = () => {
           <Button variant="outlined" color="secondary" type="submit">
             Thêm
           </Button>
-          <Snackbar
-            open={checkSuccess}
-            autoHideDuration={3000}
-            onClose={handleCloseSnackbar}
-            message="Thêm thành công"
-          />
         </form>
       </React.Fragment>
     </Container>

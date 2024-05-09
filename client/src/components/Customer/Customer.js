@@ -16,6 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
+
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -79,8 +80,14 @@ const headCells = [
   {
     id: "checkin",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "Checkin",
+  },
+  {
+    id: "amount",
+    numeric: false,
+    disablePadding: false,
+    label: "Số lượng",
   },
   {
     id: "o_catetable",
@@ -224,7 +231,7 @@ EnhancedTableToolbar.propTypes = {
 };
 const Customer = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("c_name");
+  const [orderBy, setOrderBy] = React.useState("checkin");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -379,7 +386,10 @@ const Customer = () => {
                       </TableCell>
                       <TableCell align="left">{customer.c_address}</TableCell>
                       <TableCell align="left">{customer.phone}</TableCell>
-                      <TableCell align="left">{customer.checkin}</TableCell>
+                      <TableCell align="left">
+                        {customer.checkin.strftime("%H:%M on %d/%m/%Y")}
+                      </TableCell>
+                      <TableCell align="left">{customer.amount}</TableCell>
                       <TableCell align="left">{customer.o_catetable}</TableCell>
                       <TableCell align="left">{customer.o_table}</TableCell>
                       <TableCell align="left">
