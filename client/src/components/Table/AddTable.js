@@ -41,7 +41,7 @@ const AddTable = () => {
       return;
     }
     const newTable = {
-      t_name: name,
+      name: name,
       capacity: capacity,
       type: type,
       status: status,

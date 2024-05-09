@@ -49,11 +49,11 @@ const AddEmployee = () => {
       return;
     }
     const newEmployee = {
-      e_name: name,
+      name: name,
       gender: gender,
       position: position,
       birthday: birthday,
-      e_address: address,
+      address: address,
       phone: phone,
       salary: salary,
     };

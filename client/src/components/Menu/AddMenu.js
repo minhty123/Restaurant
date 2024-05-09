@@ -41,7 +41,7 @@ const AddMenu = () => {
       return;
     }
     const newMenu = {
-      m_name: name,
+      name: name,
       describe: describe,
       price: price,
       category: category,

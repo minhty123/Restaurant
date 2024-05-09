@@ -3,8 +3,8 @@ const slug = require('mongoose-slug-generator');
 
 const CustomerSchema = new mongoose.Schema(
   {
-    c_name: { type: String, required: true },
-    c_address: { type: String, required: true },
+    name: { type: String, required: true },
+    address: { type: String, required: true },
     phone: { type: Number, required: true },
     amount: { type: Number, required: true },
     checkin: { type: Date, required: true },
@@ -12,7 +12,7 @@ const CustomerSchema = new mongoose.Schema(
     o_catetable: { type: String, required: false },
     o_table: { type: String, required: false },
     note: { type: String, required: false },
-    slug: { type: String, slug: 'c_name', unique: true }
+    slug: { type: String, slug: 'name', unique: true }
   },
   {
     timestamps: true

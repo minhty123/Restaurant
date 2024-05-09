@@ -11,10 +11,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import PageNotFound from "../NotFound/PageNotFound";
 import { Link } from "react-router-dom";
 
 const EditCustomer = (props) => {
-  const [customer, setCustomer] = useState({});
+  const [customer, setCustomer] = useState(null);
   const { slug } = useParams();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -61,8 +62,8 @@ const EditCustomer = (props) => {
       }
 
       const newCustomer = {
-        c_name: name,
-        c_address: address,
+        name: name,
+        address: address,
         phone: phone,
         checkin: checkin,
         checkout: checkout,
@@ -82,10 +83,16 @@ const EditCustomer = (props) => {
   }
   async function getCustomer() {
     if (props.type === "edit") {
-      const res = await axios.get(
-        "http://localhost:8000/customers/edit" + slug
-      );
+      const res = await axios.get("http://localhost:8000/customers/" + slug);
       setCustomer(res.data.customer);
+      setName(res.data.customer.name);
+      setPhone(res.data.customer.phone);
+      setAddress(res.data.customer.address);
+      setCheckin(res.data.customer.checkin);
+      setCheckout(res.data.customer.checkout);
+      setAmount(res.data.customer.amount);
+      setCatetable(res.data.customer.o_catetable);
+      setNote(res.data.customer.note);
     }
   }
   useEffect(() => {
@@ -96,123 +103,131 @@ const EditCustomer = (props) => {
     setCatetable(event.target.value);
   };
   return (
-    <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Sửa thông tin Món</h2>
-      <br />
-      <form onSubmit={handleSubmitEdit} action={<Link to="/customers" />}>
-        <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Họ và tên"
-            name="name"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            fullWidth
-            required
-          />
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Số điện thoại"
-            name="phone"
-            onChange={(e) => setPhone(e.target.value)}
-            value={phone}
-            fullWidth
-            required
-          />
-        </Stack>
-        <TextField
-          type="text"
-          variant="outlined"
-          color="secondary"
-          label="Địa chỉ"
-          name="address"
-          onChange={(e) => setAddress(e.target.value)}
-          value={address}
-          fullWidth
-          required
-          sx={{ marginBottom: 4 }}
-        />
-        <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="number"
-            variant="outlined"
-            color="secondary"
-            label="Số lượng"
-            name="amount"
-            onChange={(e) => setAmount(e.target.value)}
-            value={amount}
-            fullWidth
-            required
-          />
-          <FormControl fullWidth>
-            <InputLabel id="category-label">Loại bàn</InputLabel>
-            <Select
-              labelId="category-label"
-              id="category-select"
-              value={catetable}
-              label="Loại bàn"
-              onChange={handleChange}
-            >
-              {cates.map((cate) => (
-                <MenuItem key={cate._id} value={cate.name}>
-                  {cate.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
+    <>
+      {customer ? (
+        <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
+          <React.Fragment>
+            <h2>Sửa thông tin Món</h2>
+            <br />
+            <form onSubmit={handleSubmitEdit} action={<Link to="/customers" />}>
+              <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  color="secondary"
+                  label="Họ và tên"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  fullWidth
+                  required
+                />
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  color="secondary"
+                  label="Số điện thoại"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  fullWidth
+                  required
+                />
+              </Stack>
+              <TextField
+                type="text"
+                variant="outlined"
+                color="secondary"
+                label="Địa chỉ"
+                name="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                fullWidth
+                required
+                sx={{ marginBottom: 4 }}
+              />
+              <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+                <TextField
+                  type="number"
+                  variant="outlined"
+                  color="secondary"
+                  label="Số lượng"
+                  name="amount"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  fullWidth
+                  required
+                />
+                <FormControl fullWidth>
+                  <InputLabel id="category-label">Loại bàn</InputLabel>
+                  <Select
+                    labelId="category-label"
+                    id="category-select"
+                    value={catetable}
+                    label="Loại bàn"
+                    onChange={handleChange}
+                  >
+                    {cates.map((cate) => (
+                      <MenuItem key={cate._id} value={cate.name}>
+                        {cate.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
 
-        <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="date"
-            variant="outlined"
-            color="secondary"
-            label="Checkin"
-            name="checkin"
-            onChange={(e) => setCheckin(e.target.value)}
-            value={checkin}
-            fullWidth
-            required
-          />
-          <TextField
-            type="date"
-            variant="outlined"
-            color="secondary"
-            label="Checkout"
-            name="checkout"
-            onChange={(e) => setCheckout(e.target.value)}
-            value={checkout}
-            fullWidth
-            required
-          />
-        </Stack>
-        <TextField
-          type="text"
-          variant="outlined"
-          color="secondary"
-          label="Ghi chú"
-          name="note"
-          onChange={(e) => setNote(e.target.value)}
-          value={note}
-          fullWidth
-          sx={{ marginBottom: 4 }}
-        />
-        <Button variant="outlined" color="secondary" type="submit">
-          Thêm
-        </Button>
-      </form>
-      {error && <div className="error">{error}</div>}
-      {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Sửa Món thành công!</p>
+              <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+                <TextField
+                  type="datetime-local"
+                  variant="outlined"
+                  color="secondary"
+                  label="Checkin"
+                  name="checkin"
+                  value={checkin}
+                  onChange={(e) => setCheckin(e.target.value)}
+                  fullWidth
+                  required
+                />
+                <TextField
+                  type="datetime-local"
+                  variant="outlined"
+                  color="secondary"
+                  label="Checkout"
+                  name="checkout"
+                  value={checkout}
+                  onChange={(e) => setCheckout(e.target.value)}
+                  fullWidth
+                  required
+                />
+              </Stack>
+              <TextField
+                type="text"
+                variant="outlined"
+                color="secondary"
+                label="Ghi chú"
+                name="note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                fullWidth
+                sx={{ marginBottom: 4 }}
+              />
+              <Button variant="outlined" color="secondary" type="submit">
+                Sửa
+              </Button>
+            </form>
+            {error && <div className="error">{error}</div>}
+            {validated && checkSuccess && noti === 201 && (
+              <p style={{ color: "green" }}>Sửa Món thành công!</p>
+            )}
+            {validated && !checkSuccess && (
+              <p style={{ color: "red" }}>Sửa Món không thành công!</p>
+            )}
+          </React.Fragment>
+        </Container>
+      ) : (
+        <PageNotFound />
       )}
-      {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Sửa Món không thành công!</p>
-      )}
-    </Container>
+    </>
   );
 };
 

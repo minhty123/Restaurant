@@ -59,7 +59,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "t_name",
+    id: "name",
     numeric: false,
     disablePadding: true,
     label: "Số bàn",
@@ -358,7 +358,7 @@ const ViewTable = () => {
                         scope="row"
                         padding="none"
                       >
-                        {table.t_name}
+                        {table.name}
                       </TableCell>
                       <TableCell align="left">{table.type}</TableCell>
                       <TableCell align="left">{table.capacity}</TableCell>

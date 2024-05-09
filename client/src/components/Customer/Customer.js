@@ -60,13 +60,13 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "c_name",
+    id: "name",
     numeric: false,
     disablePadding: true,
     label: "name",
   },
   {
-    id: "c_address",
+    id: "address",
     numeric: false,
     disablePadding: false,
     label: "address",
@@ -382,13 +382,11 @@ const Customer = () => {
                         scope="row"
                         padding="none"
                       >
-                        {customer.c_name}
+                        {customer.name}
                       </TableCell>
-                      <TableCell align="left">{customer.c_address}</TableCell>
+                      <TableCell align="left">{customer.address}</TableCell>
                       <TableCell align="left">{customer.phone}</TableCell>
-                      <TableCell align="left">
-                        {customer.checkin.strftime("%H:%M on %d/%m/%Y")}
-                      </TableCell>
+                      <TableCell align="left">{customer.checkin}</TableCell>
                       <TableCell align="left">{customer.amount}</TableCell>
                       <TableCell align="left">{customer.o_catetable}</TableCell>
                       <TableCell align="left">{customer.o_table}</TableCell>

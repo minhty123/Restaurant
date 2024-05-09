@@ -59,7 +59,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "e_name",
+    id: "name",
     numeric: false,
     disablePadding: true,
     label: "name",
@@ -77,7 +77,7 @@ const headCells = [
     label: "position",
   },
   {
-    id: "e_address",
+    id: "address",
     numeric: false,
     disablePadding: false,
     label: "address",
@@ -161,7 +161,7 @@ EnhancedTableHead.propTypes = {
 
 const Employee = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("e_address");
+  const [orderBy, setOrderBy] = React.useState("name");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -365,11 +365,11 @@ const Employee = () => {
                         scope="row"
                         padding="none"
                       >
-                        {employee.e_name}
+                        {employee.name}
                       </TableCell>
                       <TableCell align="left">{employee.gender}</TableCell>
                       <TableCell align="left">{employee.position}</TableCell>
-                      <TableCell align="left">{employee.e_address}</TableCell>
+                      <TableCell align="left">{employee.address}</TableCell>
 
                       <TableCell align="left">{employee.phone}</TableCell>
                       <TableCell align="left">

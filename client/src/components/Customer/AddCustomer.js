@@ -56,8 +56,8 @@ const AddCustomer = () => {
     }
 
     const newCustomer = {
-      c_name: name,
-      c_address: address,
+      name: name,
+      address: address,
       phone: phone,
       checkin: checkin,
       checkout: checkout,

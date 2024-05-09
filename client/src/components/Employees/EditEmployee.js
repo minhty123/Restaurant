@@ -58,11 +58,11 @@ const EditEmployee = (props) => {
         return;
       }
       const newEmployee = {
-        e_name: name,
+        name: name,
         gender: gender,
         position: position,
         birthday: birthday,
-        e_address: address,
+        address: address,
         phone: phone,
         salary: salary,
       };
@@ -78,10 +78,15 @@ const EditEmployee = (props) => {
   }
   async function getEmployee() {
     if (props.type === "edit") {
-      const res = await axios.get(
-        "http://localhost:8000/employees/edit" + slug
-      );
+      const res = await axios.get("http://localhost:8000/employees/" + slug);
       setEmployee(res.data.employee);
+      setName(res.data.employee.name);
+      setPosition(res.data.employee.position);
+      setBirthday(res.data.employee.birthday);
+      setAddress(res.data.employee.address);
+      setPhone(res.data.employee.phone);
+      setGender(res.data.employee.gender);
+      setSalary(res.data.employee.salary);
     }
   }
   useEffect(() => {

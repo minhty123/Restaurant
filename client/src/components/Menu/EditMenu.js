@@ -50,7 +50,7 @@ const EditMenu = (props) => {
       }
 
       const newMenu = {
-        m_name: name,
+        name: name,
         describe: describe,
         price: price,
         category: category,
@@ -70,8 +70,15 @@ const EditMenu = (props) => {
   }
   async function getMenu() {
     if (props.type === "edit") {
-      const res = await axios.get("http://localhost:8000/menus/edit" + slug);
-      setMenu(res.data.employee);
+      const res = await axios.get("http://localhost:8000/menus/" + slug);
+      setMenu(res.data.menu);
+      setName(res.data.menu.name);
+      setDescribe(res.data.menu.describe);
+      setPrice(res.data.menu.price);
+      setCategory(res.data.menu.category);
+      setUnit(res.data.menu.unit);
+      setImage(res.data.menu.image);
+      setStatus(res.data.menu.status);
     }
   }
   useEffect(() => {

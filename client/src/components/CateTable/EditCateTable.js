@@ -55,10 +55,12 @@ const EditCateTable = (props) => {
   }
   async function getCateTable() {
     if (props.type === "edit") {
-      const res = await axios.get(
-        "http://localhost:8000/catetables/edit" + slug
-      );
+      const res = await axios.get("http://localhost:8000/catetables/" + slug);
       setCateTable(res.data.catetable);
+      setName(res.data.catetable.name);
+      setDescribe(res.data.catetable.describe);
+      setPrice(res.data.catetable.price);
+      setUnit(res.data.catetable.unit);
     }
   }
   useEffect(() => {
@@ -124,10 +126,10 @@ const EditCateTable = (props) => {
       </form>
       {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Sửa Món thành công!</p>
+        <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Sửa Món không thành công!</p>
+        <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
       )}
     </Container>
   );

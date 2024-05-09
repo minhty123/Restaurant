@@ -59,7 +59,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "m_name",
+    id: "name",
     numeric: false,
     disablePadding: true,
     label: "Tên món",
@@ -160,7 +160,7 @@ EnhancedTableHead.propTypes = {
 
 const Menu = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("m_name");
+  const [orderBy, setOrderBy] = React.useState("name");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -364,7 +364,7 @@ const Menu = () => {
                         scope="row"
                         padding="none"
                       >
-                        {menu.m_name}
+                        {menu.name}
                       </TableCell>
                       <TableCell align="left">{menu.price}</TableCell>
                       <TableCell align="left">{menu.category}</TableCell>

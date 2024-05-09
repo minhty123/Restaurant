@@ -49,7 +49,7 @@ const EditTable = (props) => {
       }
 
       const newTable = {
-        t_name: name,
+        name: name,
         capacity: capacity,
         type: type,
         status: status,
@@ -65,8 +65,12 @@ const EditTable = (props) => {
   }
   async function getTable() {
     if (props.type === "edit") {
-      const res = await axios.get("http://localhost:8000/tables/edit" + slug);
+      const res = await axios.get("http://localhost:8000/tables/" + slug);
       setTable(res.data.table);
+      setName(res.data.table.name);
+      setCapacity(res.data.table.capacity);
+      setType(res.data.table.type);
+      setStatus(res.data.table.status);
     }
   }
   useEffect(() => {
