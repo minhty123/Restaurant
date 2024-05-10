@@ -355,7 +355,11 @@ const Menu = () => {
                         {catetable.name}
                       </TableCell>
                       <TableCell align="left">{catetable.price}</TableCell>
-                      <TableCell align="left">{catetable.describe}</TableCell>
+                      <TableCell align="left">
+                        {catetable.describe.length > 25
+                          ? `${catetable.describe.substring(0, 25)}...`
+                          : catetable.describe}
+                      </TableCell>
                       <TableCell align="left">
                         <Button
                           className="edit-delete"

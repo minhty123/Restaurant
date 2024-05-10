@@ -9,7 +9,12 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -18,7 +23,7 @@ const EditEmployee = (props) => {
   const { slug } = useParams();
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
-  const [birthday, setBirthday] = useState("");
+  const [birthday, setBirthday] = useState(dayjs());
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
@@ -124,18 +129,21 @@ const EditEmployee = (props) => {
             required
           />
         </Stack>
+        
 
-        <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="date"
-            variant="outlined"
-            color="secondary"
-            label="Ngày sinh"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-            fullWidth
-            required
-          />
+        <Stack
+          spacing={2}
+          direction="row"
+          sx={{ marginBottom: 4 }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Ngày sinh"
+              value={dayjs(birthday)}
+              onChange={(newValue) => setBirthday(newValue)}
+            />
+          </LocalizationProvider>
+
           <FormControl fullWidth>
             <InputLabel id="position-label">Position</InputLabel>
             <Select
@@ -183,7 +191,7 @@ const EditEmployee = (props) => {
             </Select>
           </FormControl>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="Lương"
@@ -193,10 +201,17 @@ const EditEmployee = (props) => {
             required
           />
         </Stack>
-
-        <Button variant="outlined" color="secondary" type="submit">
-          Sửa
-        </Button>
+        <div>
+          <Button variant="outlined" color="secondary" type="submit">
+            Sửa
+          </Button>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Link to="/employees">
+              <ArrowBackIcon />
+              Danh sách Nhân Viên
+            </Link>
+          </div>
+        </div>
       </form>
       {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (

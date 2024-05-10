@@ -368,7 +368,11 @@ const Menu = () => {
                       </TableCell>
                       <TableCell align="left">{menu.price}</TableCell>
                       <TableCell align="left">{menu.category}</TableCell>
-                      <TableCell align="left">{menu.describe}</TableCell>
+                      <TableCell align="left">
+                        {menu.describe.length > 15
+                          ? `${menu.describe.substring(0, 15)}...`
+                          : menu.describe}
+                      </TableCell>
                       <TableCell align="left">{menu.status}</TableCell>
                       <TableCell align="left">
                         <Button

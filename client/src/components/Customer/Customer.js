@@ -16,7 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-
+import dayjs from "dayjs";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -386,7 +386,9 @@ const Customer = () => {
                       </TableCell>
                       <TableCell align="left">{customer.address}</TableCell>
                       <TableCell align="left">{customer.phone}</TableCell>
-                      <TableCell align="left">{customer.checkin}</TableCell>
+                      <TableCell align="left">
+                        {dayjs(customer.checkin).format("HH:mm DD/MM/YYYY")}
+                      </TableCell>
                       <TableCell align="left">{customer.amount}</TableCell>
                       <TableCell align="left">{customer.o_catetable}</TableCell>
                       <TableCell align="left">{customer.o_table}</TableCell>

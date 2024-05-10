@@ -62,7 +62,7 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "name",
+    label: "Họ và Tên",
   },
   {
     id: "gender",
@@ -74,20 +74,20 @@ const headCells = [
     id: "position",
     numeric: false,
     disablePadding: false,
-    label: "position",
+    label: "Chức vụ",
   },
   {
     id: "address",
     numeric: false,
     disablePadding: false,
-    label: "address",
+    label: "Địa chỉ",
   },
 
   {
     id: "phone",
     numeric: false,
     disablePadding: false,
-    label: "phone",
+    label: "Số điện thoại",
   },
   {
     id: "Action",

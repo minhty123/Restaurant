@@ -95,6 +95,9 @@ const EditTable = (props) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
             required
           />
           <FormControl fullWidth>
@@ -117,7 +120,7 @@ const EditTable = (props) => {
 
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="số lượng"

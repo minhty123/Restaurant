@@ -13,6 +13,10 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import PageNotFound from "../NotFound/PageNotFound";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const EditCustomer = (props) => {
   const [customer, setCustomer] = useState(null);
@@ -20,8 +24,8 @@ const EditCustomer = (props) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [checkin, setCheckin] = useState("");
-  const [checkout, setCheckout] = useState("");
+  const [checkin, setCheckin] = useState(dayjs());
+  const [checkout, setCheckout] = useState(dayjs());
   const [amount, setAmount] = useState("");
   const [catetable, setCatetable] = useState("");
   const [note, setNote] = useState("");
@@ -177,28 +181,22 @@ const EditCustomer = (props) => {
               </Stack>
 
               <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-                <TextField
-                  type="datetime-local"
-                  variant="outlined"
-                  color="secondary"
-                  label="Checkin"
-                  name="checkin"
-                  value={checkin}
-                  onChange={(e) => setCheckin(e.target.value)}
-                  fullWidth
-                  required
-                />
-                <TextField
-                  type="datetime-local"
-                  variant="outlined"
-                  color="secondary"
-                  label="Checkout"
-                  name="checkout"
-                  value={checkout}
-                  onChange={(e) => setCheckout(e.target.value)}
-                  fullWidth
-                  required
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    label="Checkin"
+                    value={dayjs(checkin)}
+                    onChange={(newValue) => setCheckin(newValue)}
+                    fullWidth
+                    required
+                  />
+                  <DateTimePicker
+                    label="Checkout"
+                    value={dayjs(checkout)}
+                    onChange={(newValue) => setCheckout(newValue)}
+                    fullWidth
+                    required
+                  />
+                </LocalizationProvider>
               </Stack>
               <TextField
                 type="text"

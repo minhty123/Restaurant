@@ -103,7 +103,7 @@ const AddTable = () => {
 
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="số lượng"

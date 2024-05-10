@@ -117,6 +117,8 @@ const AddMenu = () => {
           value={describe}
           onChange={(e) => setDescribe(e.target.value)}
           fullWidth
+          multiline
+          rows={4}
           required
           sx={{ marginBottom: 4 }}
         />
@@ -130,13 +132,16 @@ const AddMenu = () => {
               label="Đơn vị"
               onChange={(e) => setUnit(e.target.value)}
             >
-              <MenuItem value={"Phần"}>Món Chính</MenuItem>
-              <MenuItem value={"Đĩa"}>Món Khai Vị</MenuItem>
-              <MenuItem value={"Ly"}>Món Tráng Miệng</MenuItem>
+              <MenuItem value={"Phần"}>Phần</MenuItem>
+              <MenuItem value={"Đĩa"}>Đĩa</MenuItem>
+              <MenuItem value={"Ly"}>Ly</MenuItem>
+              <MenuItem value={"Gram(g)"}>Gram (g)</MenuItem>
+              <MenuItem value={"Mililít(ml)"}>Mililít (ml)</MenuItem>
+              <MenuItem value={"Miếng"}>Miếng</MenuItem>
             </Select>
           </FormControl>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="Giá"

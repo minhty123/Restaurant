@@ -144,9 +144,12 @@ const EditMenu = (props) => {
               label="Đơn vị"
               onChange={(e) => setUnit(e.target.value)}
             >
-              <MenuItem value={"Ly"}>Ly</MenuItem>
-              <MenuItem value={"Đĩa"}>Đĩa</MenuItem>
               <MenuItem value={"Phần"}>Phần</MenuItem>
+              <MenuItem value={"Đĩa"}>Đĩa</MenuItem>
+              <MenuItem value={"Ly"}>Ly</MenuItem>
+              <MenuItem value={"Gram(g)"}>Gram (g)</MenuItem>
+              <MenuItem value={"Mililít(ml)"}>Mililít (ml)</MenuItem>
+              <MenuItem value={"Miếng"}>Miếng</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -172,16 +175,19 @@ const EditMenu = (props) => {
             fullWidth
             required
           />
-          <TextField
-            type="text"
-            variant="outlined"
-            color="secondary"
-            label="Trạng thái"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            fullWidth
-            required
-          />
+          <FormControl fullWidth>
+            <InputLabel id="unit-label">Trạng thái</InputLabel>
+            <Select
+              labelId="unit-label"
+              id="unit-select"
+              value={status}
+              label="Trạng thái"
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <MenuItem value={"Có sẵn"}>Có sẵn</MenuItem>
+              <MenuItem value={"Hết"}>Hết</MenuItem>
+            </Select>
+          </FormControl>
         </Stack>
 
         <Button variant="outlined" color="secondary" type="submit">

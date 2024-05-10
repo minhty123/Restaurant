@@ -11,11 +11,15 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const AddEmployee = () => {
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
-  const [birthday, setBirthday] = useState("");
+  const [birthday, setBirthday] = useState(dayjs());
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
@@ -68,7 +72,7 @@ const AddEmployee = () => {
       setName("");
       setGender("");
       setPosition("");
-      setBirthday("");
+      setBirthday(dayjs());
       setAddress("");
       setPhone("");
       setSalary("");
@@ -112,16 +116,13 @@ const AddEmployee = () => {
         </Stack>
 
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-          <TextField
-            type="date"
-            variant="outlined"
-            color="secondary"
-            label="Ngày sinh"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-            fullWidth
-            required
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Ngày sinh"
+              value={birthday}
+              onChange={(newValue) => setBirthday(newValue)}
+            />
+          </LocalizationProvider>
           <FormControl fullWidth>
             <InputLabel id="position-label">Position</InputLabel>
             <Select
@@ -169,7 +170,7 @@ const AddEmployee = () => {
             </Select>
           </FormControl>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="Lương"
