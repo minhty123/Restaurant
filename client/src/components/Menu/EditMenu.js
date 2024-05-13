@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const EditMenu = (props) => {
   const [menu, setMenu] = useState({});
@@ -130,6 +131,8 @@ const EditMenu = (props) => {
           label="Mô tả"
           value={describe}
           onChange={(e) => setDescribe(e.target.value)}
+          multiline
+          rows={4}
           fullWidth
           required
           sx={{ marginBottom: 4 }}
@@ -193,9 +196,15 @@ const EditMenu = (props) => {
         <Button variant="outlined" color="secondary" type="submit">
           Sửa
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/menus">
+            <ArrowBackIcon />
+            Danh sách Thực Đơn
+          </Link>
+        </div>
       </form>
       {error && <div className="error">{error}</div>}
-      {validated && checkSuccess && noti === 201 && (
+      {validated && checkSuccess && noti === 200 && (
         <p style={{ color: "green" }}>Sửa Món thành công!</p>
       )}
       {validated && !checkSuccess && (

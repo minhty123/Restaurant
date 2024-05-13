@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const AddEmployee = () => {
@@ -184,6 +185,12 @@ const AddEmployee = () => {
         <Button variant="outlined" color="secondary" type="submit">
           Thêm
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/employees">
+            <ArrowBackIcon />
+            Danh sách Nhân Viên
+          </Link>
+        </div>
       </form>
       {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (

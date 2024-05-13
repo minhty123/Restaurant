@@ -9,54 +9,51 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row justify-between p-8 md:px-32 px-5">
         <div className=" w-full md:w-1/4">
           <h1 className=" font-semibold text-xl pb-4">FoodieWeb</h1>
-          <p className=" text-sm">
-            Indulge in a symphony of flavors, where each plate is a canvas for
-            culinary excellence.
-          </p>
+          <p className=" text-sm">Website nhà hàng</p>
         </div>
         <div>
           <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Links</h1>
           <nav className=" flex flex-col gap-2">
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
-              href="/"
+              href="/menus"
             >
-              Dishes
+              Thực Đơn
             </a>
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
-              href="/"
+              href="/employees"
             >
-              About
+              Nhân Viên
             </a>
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
-              href="/"
+              href="/catetables"
             >
-              Menu
+              Không gian
             </a>
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
-              href="/"
+              href="/tables"
             >
-              Reviews
+              Bàn
             </a>
           </nav>
         </div>
         <div>
-          <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Menu</h1>
+          <h1 className=" font-medium text-xl pb-4 pt-5 md:pt-0">Thực Đơn</h1>
           <nav className=" flex flex-col gap-2">
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
               href="/"
             >
-              Our Dishes
+              Món Chính
             </a>
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
               href="/"
             >
-              Premium Menu
+              Đồ uống
             </a>
           </nav>
         </div>
@@ -67,19 +64,19 @@ const Footer = () => {
               className=" hover:text-brightColor transition-all cursor-pointer"
               href="/"
             >
-              FoodieWeb@email.com
+              FoodRestaurant@email.com
             </a>
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
               href="/"
             >
-              +64 958 248 966
+              +84 325 685 715
             </a>
             <a
               className=" hover:text-brightColor transition-all cursor-pointer"
               href="/"
             >
-              Social media
+              451 Lê Văn Việt, TP, Thủ Đức
             </a>
           </nav>
         </div>

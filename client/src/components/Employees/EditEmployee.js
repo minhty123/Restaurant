@@ -129,13 +129,8 @@ const EditEmployee = (props) => {
             required
           />
         </Stack>
-        
 
-        <Stack
-          spacing={2}
-          direction="row"
-          sx={{ marginBottom: 4 }}
-        >
+        <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Ngày sinh"
@@ -214,7 +209,7 @@ const EditEmployee = (props) => {
         </div>
       </form>
       {error && <div className="error">{error}</div>}
-      {validated && checkSuccess && noti === 201 && (
+      {validated && checkSuccess && noti === 200 && (
         <p style={{ color: "green" }}>Sửa nhân viên thành công!</p>
       )}
       {validated && !checkSuccess && (

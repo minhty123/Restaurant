@@ -459,7 +459,7 @@ const Customer = () => {
             Wait!
           </Typography>
           <Typography variant="body1" component="p">
-            Are you sure you want to delete this partner?
+            Bạn có muốn xóa Khách hàng này không???
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={handleClose}>

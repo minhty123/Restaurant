@@ -10,6 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import axios from "axios";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link } from "react-router-dom";
 
 const AddMenu = () => {
@@ -181,13 +182,19 @@ const AddMenu = () => {
         <Button variant="outlined" color="secondary" type="submit">
           Thêm
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/menus">
+            <ArrowBackIcon />
+            Danh sách Thực Đơn
+          </Link>
+        </div>
       </form>
       {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
+        <p style={{ color: "green" }}>Thêm Món thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
+        <p style={{ color: "red" }}>Thêm Món không thành công!</p>
       )}
     </Container>
   );

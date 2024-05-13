@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const EditTable = (props) => {
   const [table, setTable] = useState({});
@@ -83,7 +84,7 @@ const EditTable = (props) => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Sửa thông tin Món</h2>
+      <h2>Sửa thông tin Bàn</h2>
       <br />
       <form onSubmit={handleSubmitEdit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -144,18 +145,23 @@ const EditTable = (props) => {
             </Select>
           </FormControl>
         </Stack>
-        {error && <div className="error">{error}</div>}
 
         <Button variant="outlined" color="secondary" type="submit">
           Thêm
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/tables">
+            <ArrowBackIcon />
+            Danh sách Bàn
+          </Link>
+        </div>
       </form>
-
-      {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Sửa Món thành công!</p>
+      {error && <div className="error">{error}</div>}
+      {validated && checkSuccess && noti === 200 && (
+        <p style={{ color: "green" }}>Sửa Thông tin bàn thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Sửa Món không thành công!</p>
+        <p style={{ color: "red" }}>Sửa Thông tin bàn không thành công!</p>
       )}
     </Container>
   );

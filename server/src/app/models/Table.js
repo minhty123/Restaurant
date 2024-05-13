@@ -7,8 +7,6 @@ const TableSchema = new mongoose.Schema(
     capacity: { type: Number, required: true },
     type: { type: String, required: false },
     status: { type: String, required: true },
-    reserved: { type: String, required: false },
-    reserved_time: { type: String, required: false },
     slug: { type: String, slug: 'name', unique: true }
   },
   {

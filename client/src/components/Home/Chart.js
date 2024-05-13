@@ -12,12 +12,12 @@ function createData(time, amount) {
 const data = [
   createData('00:00', 0),
   createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
+  createData('06:00', 900),
+  createData('09:00', 2000),
+  createData('12:00', 2500),
+  createData('15:00', 4000),
+  createData('18:00', 5400),
+  createData('21:00', 6400),
   createData('24:00'),
 ];
 
@@ -26,7 +26,7 @@ export default function Chart() {
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>Hôm nay</Title>
       <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden' }}>
         <LineChart
           dataset={data}
@@ -46,13 +46,13 @@ export default function Chart() {
           ]}
           yAxis={[
             {
-              label: 'Sales ($)',
+              label: 'Thu nhập ($)',
               labelStyle: {
                 ...theme.typography.body1,
                 fill: theme.palette.text.primary,
               },
               tickLabelStyle: theme.typography.body2,
-              max: 2500,
+              max: 6500,
               tickNumber: 3,
             },
           ]}

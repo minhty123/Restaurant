@@ -67,7 +67,7 @@ const headCells = [
   {
     id: "type",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "Loại bàn",
   },
   {
@@ -430,7 +430,7 @@ const ViewTable = () => {
             Wait!
           </Typography>
           <Typography variant="body1" component="p">
-            Are you sure you want to delete this menu?
+            Bạn có muốn xóa bàn này???
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={handleClose}>

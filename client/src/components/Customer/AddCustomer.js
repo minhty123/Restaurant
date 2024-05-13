@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AddCustomer = () => {
   const [name, setName] = useState("");
@@ -203,7 +204,19 @@ const AddCustomer = () => {
           <Button variant="outlined" color="secondary" type="submit">
             Thêm
           </Button>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Link to="/customers">
+              <ArrowBackIcon />
+              Danh sách Khách Hàng
+            </Link>
+          </div>
         </form>
+        {validated && checkSuccess && noti === 201 && (
+          <p style={{ color: "green" }}>Thêm khách hàng thành công!</p>
+        )}
+        {validated && !checkSuccess && (
+          <p style={{ color: "red" }}>Thêm khách hàng không thành công!</p>
+        )}
       </React.Fragment>
     </Container>
   );

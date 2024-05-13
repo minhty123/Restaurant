@@ -160,7 +160,7 @@ EnhancedTableHead.propTypes = {
 
 const Menu = () => {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
+  const [orderBy, setOrderBy] = React.useState("category");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -441,7 +441,7 @@ const Menu = () => {
             Wait!
           </Typography>
           <Typography variant="body1" component="p">
-            Are you sure you want to delete this menu?
+            Bạn có muốn xóa món này không???
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={handleClose}>

@@ -10,6 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import axios from "axios";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link } from "react-router-dom";
 
 const AddCateTable = () => {
@@ -56,7 +57,7 @@ const AddCateTable = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
-      <h2>Thêm Không gian bàn</h2>
+      <h1>Thêm Không gian Bàn</h1>
       <br />
       <form onSubmit={handleSubmit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -110,13 +111,19 @@ const AddCateTable = () => {
         <Button variant="outlined" color="secondary" type="submit">
           Thêm
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/catetables">
+            <ArrowBackIcon />
+            Danh sách Không Gian Bàn
+          </Link>
+        </div>
       </form>
       {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
+        <p style={{ color: "green" }}>Thêm Không gian thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
+        <p style={{ color: "red" }}>Thêm không gian không thành công!</p>
       )}
     </Container>
   );

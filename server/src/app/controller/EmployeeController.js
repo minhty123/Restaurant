@@ -25,7 +25,6 @@ class EmployeeController {
   //[POST] /employees/create
   async create(req, res) {
     const employee = new Employee(req.body);
-
     employee
       .save()
       .then(() => {

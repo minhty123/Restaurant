@@ -10,6 +10,7 @@ import {
   Select,
 } from "@mui/material";
 import axios from "axios";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -121,15 +122,21 @@ const EditCateTable = (props) => {
           />
         </Stack>
         <Button variant="outlined" color="secondary" type="submit">
-          Thêm
+          Sửa
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/catetables">
+            <ArrowBackIcon />
+            Danh sách Không Gian Bàn
+          </Link>
+        </div>
       </form>
       {error && <div className="error">{error}</div>}
-      {validated && checkSuccess && noti === 201 && (
-        <p style={{ color: "green" }}>Thêm nhân viên thành công!</p>
+      {validated && checkSuccess && noti === 200 && (
+        <p style={{ color: "green" }}>Sửa Không gian thành công!</p>
       )}
       {validated && !checkSuccess && (
-        <p style={{ color: "red" }}>Thêm nhân viên không thành công!</p>
+        <p style={{ color: "red" }}>Sửa Không gian không thành công!</p>
       )}
     </Container>
   );

@@ -197,7 +197,7 @@ const Menu = () => {
               id="tableTitle"
               component="div"
             >
-              Danh sách Bàn
+              Danh sách Không gian
             </Typography>
           )}
           {numSelected > 0 ? (
@@ -427,7 +427,7 @@ const Menu = () => {
             Wait!
           </Typography>
           <Typography variant="body1" component="p">
-            Are you sure you want to delete this menu?
+            Bạn có chắc muốn xóa Không gian này???
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={handleClose}>

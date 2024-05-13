@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const EditCustomer = (props) => {
   const [customer, setCustomer] = useState(null);
@@ -111,7 +112,7 @@ const EditCustomer = (props) => {
       {customer ? (
         <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
           <React.Fragment>
-            <h2>Sửa thông tin Món</h2>
+            <h2>Sửa thông tin Khách hàng</h2>
             <br />
             <form onSubmit={handleSubmitEdit} action={<Link to="/customers" />}>
               <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -212,13 +213,23 @@ const EditCustomer = (props) => {
               <Button variant="outlined" color="secondary" type="submit">
                 Sửa
               </Button>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <Link to="/customers">
+                  <ArrowBackIcon />
+                  Danh sách Khách Hàng
+                </Link>
+              </div>
             </form>
             {error && <div className="error">{error}</div>}
-            {validated && checkSuccess && noti === 201 && (
-              <p style={{ color: "green" }}>Sửa Món thành công!</p>
+            {validated && checkSuccess && noti === 200 && (
+              <p style={{ color: "green" }}>
+                Sửa Thông tin khách hàng thành công!
+              </p>
             )}
             {validated && !checkSuccess && (
-              <p style={{ color: "red" }}>Sửa Món không thành công!</p>
+              <p style={{ color: "red" }}>
+                Sửa thông tin khách hàng không thành công!
+              </p>
             )}
           </React.Fragment>
         </Container>

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AddTable = () => {
   const [name, setName] = useState("");
@@ -127,13 +128,17 @@ const AddTable = () => {
             </Select>
           </FormControl>
         </Stack>
-        {error && <div className="error">{error}</div>}
-
         <Button variant="outlined" color="secondary" type="submit">
           Thêm
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/tables">
+            <ArrowBackIcon />
+            Danh sách Bàn
+          </Link>
+        </div>
       </form>
-
+      {error && <div className="error">{error}</div>}
       {validated && checkSuccess && noti === 201 && (
         <p style={{ color: "green" }}>Thêm Bàn thành công!</p>
       )}

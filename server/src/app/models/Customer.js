@@ -5,7 +5,7 @@ const CustomerSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     address: { type: String, required: true },
-    phone: { type: Number, required: true },
+    phone: { type: String, required: true },
     amount: { type: Number, required: true },
     checkin: { type: Date, required: true },
     checkout: { type: Date, required: true },
