@@ -24,7 +24,7 @@ const AddCustomer = () => {
   const [address, setAddress] = useState("");
   const [checkin, setCheckin] = useState(dayjs());
   const [checkout, setCheckout] = useState(dayjs());
-  const [amount, setAmount] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [catetable, setCatetable] = useState("");
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -51,7 +51,7 @@ const AddCustomer = () => {
       return;
     }
     //số lượng >0
-    if (amount < 0) {
+    if (quantity < 0) {
       setError("lượng khách phải lớn hơn 0");
       return;
     }
@@ -67,8 +67,8 @@ const AddCustomer = () => {
       phone: phone,
       checkin: checkin,
       checkout: checkout,
-      amount: amount,
-      o_catetable: catetable,
+      quantity: quantity,
+      catetable: catetable,
       note: note,
     };
 
@@ -85,7 +85,7 @@ const AddCustomer = () => {
       setAddress("");
       setCheckin(dayjs());
       setCheckout(dayjs());
-      setAmount("");
+      setQuantity("");
       setCatetable("");
       setNote("");
       setError("");
@@ -146,9 +146,9 @@ const AddCustomer = () => {
               variant="outlined"
               color="secondary"
               label="Số lượng"
-              name="amount"
-              onChange={(e) => setAmount(e.target.value)}
-              value={amount}
+              name="quantity"
+              onChange={(e) => setQuantity(e.target.value)}
+              value={quantity}
               fullWidth
               required
             />

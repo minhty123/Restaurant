@@ -84,13 +84,13 @@ const headCells = [
     label: "Checkin",
   },
   {
-    id: "amount",
+    id: "quantity",
     numeric: false,
     disablePadding: false,
     label: "Số lượng",
   },
   {
-    id: "o_catetable",
+    id: "catetable",
     numeric: false,
     disablePadding: false,
     label: "Loại",
@@ -99,7 +99,7 @@ const headCells = [
     id: "o_table",
     numeric: false,
     disablePadding: false,
-    label: "Mã bàn",
+    label: "Số bàn",
   },
   {
     id: "Action",
@@ -389,8 +389,8 @@ const Customer = () => {
                       <TableCell align="left">
                         {dayjs(customer.checkin).format("HH:mm DD/MM/YYYY")}
                       </TableCell>
-                      <TableCell align="left">{customer.amount}</TableCell>
-                      <TableCell align="left">{customer.o_catetable}</TableCell>
+                      <TableCell align="left">{customer.quantity}</TableCell>
+                      <TableCell align="left">{customer.catetable}</TableCell>
                       <TableCell align="left">{customer.o_table}</TableCell>
                       <TableCell align="left">
                         <Button

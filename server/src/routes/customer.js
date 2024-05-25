@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const CustomerController = require('../app/controller/CustomerController');
+const ArrangeTable = require('../utils/arrange');
 
 router.post('/create', CustomerController.create);
 router.put('/edit/:slug', CustomerController.edit);

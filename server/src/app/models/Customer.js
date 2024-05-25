@@ -6,10 +6,10 @@ const CustomerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     address: { type: String, required: true },
     phone: { type: String, required: true },
-    amount: { type: Number, required: true },
+    quantity: { type: Number, required: true },
     checkin: { type: Date, required: true },
     checkout: { type: Date, required: true },
-    o_catetable: { type: String, required: false },
+    catetable: { type: String, required: false },
     o_table: { type: String, required: false },
     note: { type: String, required: false },
     slug: { type: String, slug: 'name', unique: true }

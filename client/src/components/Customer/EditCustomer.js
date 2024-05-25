@@ -27,7 +27,7 @@ const EditCustomer = (props) => {
   const [address, setAddress] = useState("");
   const [checkin, setCheckin] = useState(dayjs());
   const [checkout, setCheckout] = useState(dayjs());
-  const [amount, setAmount] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [catetable, setCatetable] = useState("");
   const [note, setNote] = useState("");
   const [noti, setNoti] = useState(0);
@@ -56,7 +56,7 @@ const EditCustomer = (props) => {
         return;
       }
       //số lượng >0
-      if (amount < 0) {
+      if (quantity < 0) {
         setError("lượng khách phải lớn hơn 0");
         return;
       }
@@ -72,8 +72,9 @@ const EditCustomer = (props) => {
         phone: phone,
         checkin: checkin,
         checkout: checkout,
-        amount: amount,
-        o_catetable: catetable,
+        quantity: quantity,
+        catetable: catetable,
+
         note: note,
       };
       const res = await axios.put(
@@ -95,8 +96,8 @@ const EditCustomer = (props) => {
       setAddress(res.data.customer.address);
       setCheckin(res.data.customer.checkin);
       setCheckout(res.data.customer.checkout);
-      setAmount(res.data.customer.amount);
-      setCatetable(res.data.customer.o_catetable);
+      setQuantity(res.data.customer.quantity);
+      setCatetable(res.data.customer.catetable);
       setNote(res.data.customer.note);
     }
   }
@@ -157,9 +158,9 @@ const EditCustomer = (props) => {
                   variant="outlined"
                   color="secondary"
                   label="Số lượng"
-                  name="amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  name="quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
                   fullWidth
                   required
                 />

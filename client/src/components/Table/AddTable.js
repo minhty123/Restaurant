@@ -75,7 +75,7 @@ const AddTable = () => {
       <form onSubmit={handleSubmit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="Số bàn"
@@ -123,8 +123,8 @@ const AddTable = () => {
               label="Trạng thái"
               onChange={(e) => setStatus(e.target.value)}
             >
-              <MenuItem value={"Có sẵn"}>Có sẵn</MenuItem>
-              <MenuItem value={"Hết"}>Hết</MenuItem>
+              <MenuItem value={"available"}>Có sẵn</MenuItem>
+              <MenuItem value={"Đã gán"}>Hết</MenuItem>
             </Select>
           </FormControl>
         </Stack>

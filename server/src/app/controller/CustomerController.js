@@ -1,15 +1,28 @@
 const Customer = require('../models/Customer');
+const Table = require('../models/Table');
+const optimizeSeating = require('../../utils/arrange');
 
 class CustomerController {
   //[GET] /customers/
+  // async show(req, res) {
+  //   Customer.find({})
+  //     .then((customer) => {
+  //       res.status(200).json({ success: true, customer });
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).json({ success: false, err });
+  //     });
+  // }
   async show(req, res) {
-    Customer.find({})
-      .then((customer) => {
-        res.status(200).json({ success: true, customer });
-      })
-      .catch((err) => {
-        res.status(500).json({ success: false, err });
-      });
+    try {
+      const customers = await Customer.find({});
+      const tables = await Table.find({});
+
+      await optimizeSeating(customers, tables);
+      res.status(200).json({ success: true, customers });
+    } catch (err) {
+      res.status(500).json({ success: false, err });
+    }
   }
   //[GET] /customers/:slug
   async detail(req, res) {
@@ -33,7 +46,7 @@ class CustomerController {
         res.status(400).json({ success: false, message: err });
       });
   }
-  
+
   //[PUT] /customers
   async edit(req, res) {
     Customer.findOneAndUpdate({ slug: req.params.slug }, req.body, {

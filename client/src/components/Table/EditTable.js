@@ -89,7 +89,7 @@ const EditTable = (props) => {
       <form onSubmit={handleSubmitEdit}>
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <TextField
-            type="text"
+            type="number"
             variant="outlined"
             color="secondary"
             label="Số bàn"
@@ -140,8 +140,8 @@ const EditTable = (props) => {
               label="Trạng thái"
               onChange={(e) => setStatus(e.target.value)}
             >
-              <MenuItem value={"Có sẵn"}>Có sẵn</MenuItem>
-              <MenuItem value={"Hết"}>Hết</MenuItem>
+              <MenuItem value={"available"}>Có sẵn</MenuItem>
+              <MenuItem value={"Đã gán"}>Hết</MenuItem>
             </Select>
           </FormControl>
         </Stack>
