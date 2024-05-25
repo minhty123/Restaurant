@@ -14,8 +14,8 @@ import { Link } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AddTable = () => {
-  const [name, setName] = useState("");
-  const [capacity, setCapacity] = useState("");
+  const [name, setName] = useState();
+  const [capacity, setCapacity] = useState();
   const [type, setType] = useState("");
   // const [reserved, setReserved] = useState("");
   // const [reserved_time, setReserved_time] = useState("");

@@ -1,17 +1,7 @@
 const munkresAlgorithm = require('./munkresAL.js');
 const Table = require('../app/models/Table');
 const Customer = require('../app/models/Customer.js');
-
-// async function Arrange() {
-//   try {
-//     const customers = await Customer.find().exec();
-//     const tables = await Table.find().exec();
-
-//     optimizeSeating(customers, tables);
-//   } catch (error) {
-//     console.error('Lỗi khi lấy dữ liệu:', error);
-//   }
-// }
+const { set } = require('mongoose');
 
 async function optimizeSeating(customers, tables) {
   customers.sort((a, b) => a.checkin - b.checkin);
@@ -40,9 +30,11 @@ async function optimizeSeating(customers, tables) {
       }
     }
   }
-  console.table(costMatrix);
+  // console.table(costMatrix);
   let Arrange;
-
+  for (i = 0; i < tables.length; i++) {
+    tables[i].index = i;
+  }
   Arrange = munkresAlgorithm(costMatrix, copies);
 
   console.log(Arrange);
@@ -59,49 +51,95 @@ async function optimizeSeating(customers, tables) {
   });
 
   // Bước 2: Tạo mảng mới chỉ chứa các mảng con không bị trùng lặp phần tử đầu tiên
-  const result = [];
-  const removed = [];
+  const result = new Set();
+  const removed = new Set();
   const seenFirstElements = {};
+  const res = new Set();
 
-  Arrange.forEach((sublist) => {
-    const firstElement = sublist[0];
-    if (countDict[firstElement] === 1 || !seenFirstElements[firstElement]) {
-      result.push(sublist);
-      seenFirstElements[firstElement] = true;
-    } else {
-      const prevIndex = result.findIndex((item) => item[0] === firstElement);
-      const prevSublist = result[prevIndex];
-
-      if (customers[prevSublist[1]].checkout >= customers[sublist[1]].checkin) {
-        removed.push(sublist);
+  for (i = 0; i < Arrange.length; i++) {
+    const firstElement = Arrange[i][0];
+    for (j = i + 1; j < Arrange.length; j++) {
+      if (Arrange[j][0] === firstElement) {
+        res.add(Arrange[i]);
+        res.add(Arrange[j]);
       } else {
-        removed.push(prevSublist);
-        result[prevIndex] = sublist;
+        result.add(Arrange[j]);
       }
+    }
+  }
+  // Convert the set to an array
+  let resArray = Array.from(res);
+
+  for (let i = 0; i < resArray.length; i++) {
+    result.add(resArray[0]);
+    for (let j = i + 1; j < resArray.length; j++) {
+      if (
+        customers[resArray[i][1]].checkout >= customers[resArray[j][1]].checkin
+      ) {
+        result.add(resArray[i]);
+        removed.add(resArray[j]);
+      } else {
+        result.add(resArray[j]);
+      }
+    }
+  }
+  removed.forEach((item) => {
+    if (result.has(item)) {
+      result.delete(item);
     }
   });
 
-  for (i = 0; i < removed.length; i++) {
-    tables[removed[i][0]].status = 'Đã gán';
+  console.log(res);
+  console.log(result);
+  console.log(removed);
+  // Arrange.forEach((sublist) => {
+  //   const firstElement = sublist[0];
+  //   if (countDict[firstElement] === 1 || !seenFirstElements[firstElement]) {
+  //     result.push(sublist);
+  //     seenFirstElements[firstElement] = true;
+  //   } else {
+  //     const prevIndex = result.findIndex((item) => item[0] === firstElement);
+  //     const prevSublist = result[prevIndex];
+
+  //     if (customers[prevSublist[1]].checkout <= customers[sublist[1]].checkin) {
+  //       removed.push(sublist);
+  //     } else {
+  //       removed.push(prevSublist);
+  //       result[prevIndex] = sublist;
+  //     }
+  //   }
+  // });
+
+  let removedArr = Array.from(removed);
+  for (i = 0; i < removedArr.length; i++) {
+    tables[removedArr[i][0]].status = 'Đã gán';
   }
-  // In kết quả
-  console.log(tables);
-  console.log('Mảng không bị trùng lặp:', result);
-  console.log('Mảng bị cắt:', removed);
+  let resultArr = Array.from(result);
+  resultArr.forEach((sublist) => {
+    const tableIndex = sublist[0];
+    const customerIndex = sublist[1];
+    const indexTB = tables.find((t) => t.index === tableIndex);
+
+    customers[customerIndex].o_table = indexTB.name;
+  });
+
   let cus = [];
   let a_table = [];
-  for (i = 0; i < removed.length; i++) {
-    cus.push(customers[removed[i][1]]);
+
+  for (i = 0; i < removedArr.length; i++) {
+    cus.push(customers[removedArr[i][1]]);
   }
-  console.log(cus);
+
   for (i = 0; i < tables.length; i++) {
     if (tables[i].status === 'available') {
       a_table.push(tables[i]);
     }
   }
-  if (removed.length > 0) {
-    optimizeSeating(cus, a_table);
+  if (removedArr.length > 0) {
+    await optimizeSeating(cus, a_table);
   }
+
+  return customers;
 }
 
 module.exports = optimizeSeating;

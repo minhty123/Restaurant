@@ -171,64 +171,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
-
-  return (
-    <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Danh sách Khách hàng
-          </Typography>
-        )}
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Create">
-            <IconButton component={Link} to="/customers/create">
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-    </Container>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 const Customer = () => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("checkin");
@@ -253,12 +195,29 @@ const Customer = () => {
   const [customers, setCustomers] = useState([]);
   async function getCustomers() {
     const res = await axios.get("http://localhost:8000/customers");
-    setCustomers(res.data.customer);
+    setCustomers(res.data.customers);
+  }
+  // Hàm để lấy dữ liệu từ endpoint arrange
+  async function arrangeCustomers() {
+    try {
+      const res = await axios.get(
+        "http://localhost:8000/customers?arrange=true"
+      );
+      if (res.data && res.data.customers) {
+        setCustomers(res.data.customers);
+      } else {
+        console.error(
+          "Error arranging customers: Customers data not found in response"
+        );
+      }
+    } catch (error) {
+      console.error("Error arranging customers:", error);
+    }
   }
   useEffect(() => {
     getCustomers();
   }, []);
-
+  console.log(customers);
   async function deleteCustomer() {
     await axios.delete("http://localhost:8000/customers/" + customerId);
     handleClose();
@@ -331,12 +290,71 @@ const Customer = () => {
   );
 
   //   //bảng hiện thị
+  function EnhancedTableToolbar(props) {
+    const { numSelected } = props;
 
+    return (
+      <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...(numSelected > 0 && {
+              bgcolor: (theme) =>
+                alpha(
+                  theme.palette.primary.main,
+                  theme.palette.action.activatedOpacity
+                ),
+            }),
+          }}
+        >
+          {numSelected > 0 ? (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              color="inherit"
+              variant="subtitle1"
+              component="div"
+            >
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              variant="h6"
+              id="tableTitle"
+              component="div"
+            >
+              Danh sách Khách hàng
+            </Typography>
+          )}
+
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Create">
+              <IconButton component={Link} to="/customers/create">
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Toolbar>
+      </Container>
+    );
+  }
+
+  EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+  };
   return (
     <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
+          <Button onClick={arrangeCustomers}>Arrange</Button>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -351,6 +369,7 @@ const Customer = () => {
                 onRequestSort={handleRequestSort}
                 rowCount={customers.length}
               />
+
               <TableBody>
                 {visibleRows.map((customer, index) => {
                   const isItemSelected = isSelected(customer._id);

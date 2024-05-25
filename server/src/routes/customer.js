@@ -7,6 +7,7 @@ router.post('/create', CustomerController.create);
 router.put('/edit/:slug', CustomerController.edit);
 router.delete('/:id', CustomerController.delete);
 router.get('/:slug', CustomerController.detail);
+// router.get('/arrange', CustomerController.arrange);
 router.get('/', CustomerController.show);
 
 module.exports = router;

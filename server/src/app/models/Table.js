@@ -3,7 +3,7 @@ const slug = require('mongoose-slug-generator');
 
 const TableSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: Number, required: true },
     capacity: { type: Number, required: true },
     type: { type: String, required: false },
     status: { type: String, required: true },

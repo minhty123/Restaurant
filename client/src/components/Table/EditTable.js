@@ -17,8 +17,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 const EditTable = (props) => {
   const [table, setTable] = useState({});
   const { slug } = useParams();
-  const [name, setName] = useState("");
-  const [capacity, setCapacity] = useState("");
+  const [name, setName] = useState();
+  const [capacity, setCapacity] = useState();
   const [type, setType] = useState("");
   //   const [reserved, setReserved] = useState("");
   //   const [reserved_time, setReserved_time] = useState("");
