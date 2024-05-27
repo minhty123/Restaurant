@@ -56,17 +56,32 @@ async function optimizeSeating(customers, tables) {
   const seenFirstElements = {};
   const res = new Set();
 
-  for (i = 0; i < Arrange.length; i++) {
-    const firstElement = Arrange[i][0];
-    for (j = i + 1; j < Arrange.length; j++) {
-      if (Arrange[j][0] === firstElement) {
-        res.add(Arrange[i]);
-        res.add(Arrange[j]);
-      } else {
-        result.add(Arrange[j]);
+  if (Arrange.length === 1) {
+    result.add(Arrange[0]);
+  } else {
+    for (i = 0; i < Arrange.length; i++) {
+      const firstElement = Arrange[i][0];
+      for (j = i + 1; j < Arrange.length; j++) {
+        if (Arrange[j][0] === firstElement) {
+          res.add(Arrange[i]);
+          res.add(Arrange[j]);
+        } else {
+          result.add(Arrange[j]);
+        }
       }
     }
   }
+  // for (i = 0; i < Arrange.length; i++) {
+  //   const firstElement = Arrange[i][0];
+  //   for (j = i + 1; j < Arrange.length; j++) {
+  //     if (Arrange[j][0] === firstElement) {
+  //       res.add(Arrange[i]);
+  //       res.add(Arrange[j]);
+  //     } else {
+  //       result.add(Arrange[j]);
+  //     }
+  //   }
+  // }
   // Convert the set to an array
   let resArray = Array.from(res);
 
