@@ -5,7 +5,9 @@ const { set } = require('mongoose');
 
 async function optimizeSeating(customers, tables) {
   customers.sort((a, b) => a.checkin - b.checkin);
-
+  function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes * 60000);
+  }
   let jobTimes = customers.map((customer) => {
     const start = new Date(customer.checkin);
     const end = new Date(customer.checkout);
@@ -84,20 +86,94 @@ async function optimizeSeating(customers, tables) {
   // }
   // Convert the set to an array
   let resArray = Array.from(res);
+  let seen = new Set();
+  // for (let i = 0; i < resArray.length; i++) {
+  //   if (!seen.has(resArray[i][0])) {
+  //     seen.add(resArray[i][0]);
+  //     result.add(resArray[i]);
+  //   } else {
+  //     for (let j = i + 1; j < resArray.length; j++) {
+  //       let checkoutPlus15Minutes = addMinutes(
+  //         customers[resArray[i][1]].checkout,
+  //         15
+  //       );
+  //       if (
+  //         checkoutPlus15Minutes >= customers[resArray[j][1]].checkin &&
+  //         customers[resArray[i][1]].catetable ===
+  //           customers[resArray[j][1]].catetable
+  //       ) {
+  //         if (!seen.has(resArray[j][0])) {
+  //           seen.add(resArray[j][0]);
+  //           result.add(resArray[j]);
+  //         } else {
+  //           removed.add(resArray[j]);
+  //         }
+  //       } else {
+  //         result.add(resArray[j]);
+  //       }
+  //     }
+  //   }
+  // }
 
+  let addedFirstTime = new Set(); // Tạo một Set để lưu trữ các giá trị đã xuất hiện lần đầu tiên
   for (let i = 0; i < resArray.length; i++) {
-    result.add(resArray[0]);
+    if (!addedFirstTime.has(resArray[i][0])) {
+      result.add(resArray[i]); // Thêm phần tử resArray[i] vào result
+      addedFirstTime.add(resArray[i][0]); // Đánh dấu giá trị tại resArray[i][0] đã xuất hiện lần đầu
+    }
     for (let j = i + 1; j < resArray.length; j++) {
-      if (
-        customers[resArray[i][1]].checkout >= customers[resArray[j][1]].checkin
-      ) {
-        result.add(resArray[i]);
-        removed.add(resArray[j]);
-      } else {
-        result.add(resArray[j]);
+      if (resArray[i][0] === resArray[j][0]) {
+        let checkoutPlus15Minutes = addMinutes(
+          customers[resArray[i][1]].checkout,
+          15
+        );
+        if (
+          checkoutPlus15Minutes >= customers[resArray[j][1]].checkin &&
+          customers[resArray[i][1]].catetable ===
+            customers[resArray[j][1]].catetable
+        ) {
+          result.add(resArray[i]);
+          removed.add(resArray[j]);
+        } else {
+          result.add(resArray[j]);
+        }
       }
     }
   }
+
+  // for (let i = 0; i < resArray.length; i++) {
+  //   result.add(resArray[0]);
+  //   for (let j = i + 1; j < resArray.length; j++) {
+  //     let checkoutPlus15Minutes = addMinutes(
+  //       customers[resArray[i][1]].checkout,
+  //       15
+  //     );
+  //     if (
+  //       checkoutPlus15Minutes >= customers[resArray[j][1]].checkin &&
+  //       customers[resArray[i][1]].catetable ===
+  //         customers[resArray[j][1]].catetable
+  //     ) {
+  //       result.add(resArray[i]);
+  //       removed.add(resArray[j]);
+  //     } else {
+  //       result.add(resArray[j]);
+  //     }
+  //   }
+  // }
+
+  // for (let i = 0; i < resArray.length; i++) {
+  //   result.add(resArray[0]);
+  //   for (let j = i + 1; j < resArray.length; j++) {
+  //     if (
+  //       customers[resArray[i][1]].checkout >= customers[resArray[j][1]].checkin
+  //     ) {
+  //       result.add(resArray[i]);
+  //       removed.add(resArray[j]);
+  //     } else {
+  //       result.add(resArray[j]);
+  //     }
+  //   }
+  // }
   removed.forEach((item) => {
     if (result.has(item)) {
       result.delete(item);
