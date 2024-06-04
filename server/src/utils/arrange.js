@@ -32,7 +32,7 @@ async function optimizeSeating(customers, tables) {
       }
     }
   }
-  // console.table(costMatrix);
+  console.table(costMatrix);
   let Arrange;
   for (i = 0; i < tables.length; i++) {
     tables[i].index = i;
@@ -158,7 +158,6 @@ async function optimizeSeating(customers, tables) {
           result.add(resArray[i]);
           removed.add(resArray[j]);
           resArray.splice(j, 1);
-          console.log(resArray);
         } else {
           result.add(resArray[j]);
           j++; // Tăng chỉ số j nếu không xóa phần tử
@@ -207,10 +206,6 @@ async function optimizeSeating(customers, tables) {
   //     result.delete(item);
   //   }
   // });
-
-  console.log(res);
-  console.log(result);
-  console.log(removed);
   // Arrange.forEach((sublist) => {
   //   const firstElement = sublist[0];
   //   if (countDict[firstElement] === 1 || !seenFirstElements[firstElement]) {
