@@ -1,8 +1,8 @@
 const munkres = require('munkres-js');
 
 function munkresAlgorithm(costMatrix, copies) {
-  let expandedCostMatrix = [];
   let validAssignments = [];
+  let expandedCostMatrix = [];
   for (let i = 0; i < costMatrix.length; i++) {
     for (let j = 0; j < copies; j++) {
       let newRow = [...costMatrix[i]];
@@ -15,13 +15,8 @@ function munkresAlgorithm(costMatrix, copies) {
     let table = Math.floor(agent / copies);
     if (expandedCostMatrix[agent][job] !== Infinity) {
       validAssignments.push([table, job]);
-      // customers[job].o_table = table;
       console.log(
-        `Bàn ${
-          //Math.floor(
-          agent / copies
-          // )
-        } 
+        `Bàn ${agent / copies} 
         được gán cho Khách ${job} với chi phí ${expandedCostMatrix[agent][job]}`
       );
     } else {

@@ -10,7 +10,7 @@ const CustomerSchema = new mongoose.Schema(
     checkin: { type: Date, required: true },
     checkout: { type: Date, required: true },
     catetable: { type: String, required: false },
-    o_table: { type: String, required: false },
+    o_table: { type: Number, required: false },
     note: { type: String, required: false },
     slug: { type: String, slug: 'name', unique: true }
   },

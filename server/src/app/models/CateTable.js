@@ -7,6 +7,7 @@ const CateTableSchema = new mongoose.Schema(
     unit: { type: String, require: true },
     price: { type: Number, require: true },
     describe: { type: String, require: true },
+    reversed_time: { type: Number, require: true },
     slug: { type: String, slug: 'name', unique: true }
   },
   {

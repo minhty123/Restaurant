@@ -18,6 +18,7 @@ const AddCateTable = () => {
   const [describe, setDescribe] = useState("");
   const [price, setPrice] = useState("");
   const [unit, setUnit] = useState("");
+  const [reversed_time, setReversed] = useState("");
   const [noti, setNoti] = useState(0);
   const [checkSuccess, setCheckSuccess] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -30,11 +31,16 @@ const AddCateTable = () => {
       setError("giá không được nhỏ hơn 0");
       return;
     }
+    if (reversed_time < 0) {
+      setError("thời gian không được nhỏ hơn 0");
+      return;
+    }
     const newCates = {
       name: name,
       unit: unit,
       price: price,
       describe: describe,
+      reversed_time: reversed_time,
     };
     try {
       const res = await axios.post(
@@ -48,6 +54,7 @@ const AddCateTable = () => {
       setUnit("");
       setPrice("");
       setDescribe("");
+      setReversed("");
       setError("");
     } catch (error) {
       console.error(error);
@@ -71,18 +78,29 @@ const AddCateTable = () => {
             fullWidth
             required
           />
+
           <TextField
-            type="text"
+            type="Number"
             variant="outlined"
             color="secondary"
-            label="Mô tả"
-            value={describe}
-            onChange={(e) => setDescribe(e.target.value)}
+            label="Giá"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             fullWidth
             required
           />
         </Stack>
-
+        <TextField
+          type="text"
+          variant="outlined"
+          color="secondary"
+          label="Mô tả"
+          value={describe}
+          onChange={(e) => setDescribe(e.target.value)}
+          fullWidth
+          required
+          sx={{ marginBottom: 4 }}
+        />
         <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="unit-label">Đơn vị</InputLabel>
@@ -101,9 +119,9 @@ const AddCateTable = () => {
             type="Number"
             variant="outlined"
             color="secondary"
-            label="Giá"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            label="Thời gian làm sạch(phút)"
+            value={reversed_time}
+            onChange={(e) => setReversed(e.target.value)}
             fullWidth
             required
           />

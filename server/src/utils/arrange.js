@@ -1,13 +1,17 @@
 const munkresAlgorithm = require('./munkresAL.js');
-const Table = require('../app/models/Table');
+const Catetable = require('../app/models/CateTable.js');
 const Customer = require('../app/models/Customer.js');
 const { set } = require('mongoose');
-
+async function getReversedTime(catetableName) {
+  let table = await Catetable.findOne({ name: catetableName }).exec();
+  return table.reversed_time;
+}
 async function optimizeSeating(customers, tables) {
   customers.sort((a, b) => a.checkin - b.checkin);
   function addMinutes(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
   }
+
   let jobTimes = customers.map((customer) => {
     const start = new Date(customer.checkin);
     const end = new Date(customer.checkout);
@@ -39,9 +43,6 @@ async function optimizeSeating(customers, tables) {
   }
   Arrange = munkresAlgorithm(costMatrix, copies);
 
-  console.log(Arrange);
-
-  // Bước 1: Tạo đối tượng để đếm số lần xuất hiện của phần tử đầu tiên
   const countDict = {};
   Arrange.forEach((sublist) => {
     const firstElement = sublist[0];
@@ -51,23 +52,19 @@ async function optimizeSeating(customers, tables) {
       countDict[firstElement] = 1;
     }
   });
-
+  const seenFirstElements = {};
   // Bước 2: Tạo mảng mới chỉ chứa các mảng con không bị trùng lặp phần tử đầu tiên
   const result = new Set();
   const removed = new Set();
-  const seenFirstElements = {};
   const res = new Set();
-
   if (Arrange.length === 1) {
     result.add(Arrange[0]);
   } else {
     result.add(Arrange[0]);
     for (i = 0; i < Arrange.length; i++) {
       const firstElement = Arrange[i][0];
-
       for (j = i + 1; j < Arrange.length; j++) {
         if (Arrange[j][0] === firstElement) {
-          result.add(Arrange[i]);
           res.add(Arrange[i]);
           res.add(Arrange[j]);
         } else {
@@ -76,85 +73,26 @@ async function optimizeSeating(customers, tables) {
       }
     }
   }
-  // for (i = 0; i < Arrange.length; i++) {
-  //   const firstElement = Arrange[i][0];
-  //   for (j = i + 1; j < Arrange.length; j++) {
-  //     if (Arrange[j][0] === firstElement) {
-  //       res.add(Arrange[i]);
-  //       res.add(Arrange[j]);
-  //     } else {
-  //       result.add(Arrange[j]);
-  //     }
-  //   }
-  // }
+  let seen = new Set();
   // Convert the set to an array
   let resArray = Array.from(res);
-  let seen = new Set();
-  // for (let i = 0; i < resArray.length; i++) {
-  //   if (!seen.has(resArray[i][0])) {
-  //     seen.add(resArray[i][0]);
-  //     result.add(resArray[i]);
-  //   } else {
-  //     for (let j = i + 1; j < resArray.length; j++) {
-  //       let checkoutPlus15Minutes = addMinutes(
-  //         customers[resArray[i][1]].checkout,
-  //         15
-  //       );
-  //       if (
-  //         checkoutPlus15Minutes >= customers[resArray[j][1]].checkin &&
-  //         customers[resArray[i][1]].catetable ===
-  //           customers[resArray[j][1]].catetable
-  //       ) {
-  //         if (!seen.has(resArray[j][0])) {
-  //           seen.add(resArray[j][0]);
-  //           result.add(resArray[j]);
-  //         } else {
-  //           removed.add(resArray[j]);
-  //         }
-  //       } else {
-  //         result.add(resArray[j]);
-  //       }
-  //     }
-  //   }
-  // }
-
   let addedFirstTime = new Set(); // Tạo một Set để lưu trữ các giá trị đã xuất hiện lần đầu tiên
-  // for (let i = 0; i < resArray.length; i++) {
-  //   if (!addedFirstTime.has(resArray[i][0])) {
-  //     result.add(resArray[i]); // Thêm phần tử resArray[i] vào result
-  //     addedFirstTime.add(resArray[i][0]); // Đánh dấu giá trị tại resArray[i][0] đã xuất hiện lần đầu
-  //   }
-  //   for (let j = i + 1; j < resArray.length; j++) {
-  //     if (resArray[i][0] === resArray[j][0]) {
-  //       let checkoutPlus15Minutes = addMinutes(
-  //         customers[resArray[i][1]].checkout,
-  //         15
-  //       );
-  //       if (checkoutPlus15Minutes >= customers[resArray[j][1]].checkin) {
-  //         result.add(resArray[i]);
-  //         removed.add(resArray[j]);
-  //         resArray.splice(j, 1);
-  //         console.log(resArray);
-  //       } else {
-  //         result.add(resArray[j]);
-  //       }
-  //     }
-  //   }
-  // }
-
   for (let i = 0; i < resArray.length; i++) {
     if (!addedFirstTime.has(resArray[i][0])) {
       result.add(resArray[i]);
       addedFirstTime.add(resArray[i][0]);
     }
+
     let j = i + 1;
     while (j < resArray.length) {
       if (resArray[i][0] === resArray[j][0]) {
-        let checkoutPlus15Minutes = addMinutes(
+        let reversedTime = await getReversedTime(tables[resArray[i][0]].type);
+        console.log(reversedTime);
+        let checkoutPlusReversedTime = addMinutes(
           customers[resArray[i][1]].checkout,
-          15
+          reversedTime
         );
-        if (checkoutPlus15Minutes >= customers[resArray[j][1]].checkin) {
+        if (checkoutPlusReversedTime >= customers[resArray[j][1]].checkin) {
           result.add(resArray[i]);
           removed.add(resArray[j]);
           resArray.splice(j, 1);
@@ -167,62 +105,6 @@ async function optimizeSeating(customers, tables) {
       }
     }
   }
-
-  // for (let i = 0; i < resArray.length; i++) {
-  //   result.add(resArray[0]);
-  //   for (let j = i + 1; j < resArray.length; j++) {
-  //     let checkoutPlus15Minutes = addMinutes(
-  //       customers[resArray[i][1]].checkout,
-  //       15
-  //     );
-  //     if (
-  //       checkoutPlus15Minutes >= customers[resArray[j][1]].checkin &&
-  //       customers[resArray[i][1]].catetable ===
-  //         customers[resArray[j][1]].catetable
-  //     ) {
-  //       result.add(resArray[i]);
-  //       removed.add(resArray[j]);
-  //     } else {
-  //       result.add(resArray[j]);
-  //     }
-  //   }
-  // }
-
-  // for (let i = 0; i < resArray.length; i++) {
-  //   result.add(resArray[0]);
-  //   for (let j = i + 1; j < resArray.length; j++) {
-  //     if (
-  //       customers[resArray[i][1]].checkout >= customers[resArray[j][1]].checkin
-  //     ) {
-  //       result.add(resArray[i]);
-  //       removed.add(resArray[j]);
-  //     } else {
-  //       result.add(resArray[j]);
-  //     }
-  //   }
-  // }
-  // removed.forEach((item) => {
-  //   if (result.has(item)) {
-  //     result.delete(item);
-  //   }
-  // });
-  // Arrange.forEach((sublist) => {
-  //   const firstElement = sublist[0];
-  //   if (countDict[firstElement] === 1 || !seenFirstElements[firstElement]) {
-  //     result.push(sublist);
-  //     seenFirstElements[firstElement] = true;
-  //   } else {
-  //     const prevIndex = result.findIndex((item) => item[0] === firstElement);
-  //     const prevSublist = result[prevIndex];
-
-  //     if (customers[prevSublist[1]].checkout <= customers[sublist[1]].checkin) {
-  //       removed.push(sublist);
-  //     } else {
-  //       removed.push(prevSublist);
-  //       result[prevIndex] = sublist;
-  //     }
-  //   }
-  // });
 
   let removedArr = Array.from(removed);
   for (i = 0; i < removedArr.length; i++) {
