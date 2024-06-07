@@ -82,16 +82,15 @@ async function optimizeSeating(customers, tables) {
       result.add(resArray[i]);
       addedFirstTime.add(resArray[i][0]);
     }
+    let reversedTime = await getReversedTime(tables[resArray[i][0]].type);
 
+    let checkoutPlusReversedTime = addMinutes(
+      customers[resArray[i][1]].checkout,
+      reversedTime
+    );
     let j = i + 1;
     while (j < resArray.length) {
       if (resArray[i][0] === resArray[j][0]) {
-        let reversedTime = await getReversedTime(tables[resArray[i][0]].type);
-        console.log(reversedTime);
-        let checkoutPlusReversedTime = addMinutes(
-          customers[resArray[i][1]].checkout,
-          reversedTime
-        );
         if (checkoutPlusReversedTime >= customers[resArray[j][1]].checkin) {
           result.add(resArray[i]);
           removed.add(resArray[j]);
