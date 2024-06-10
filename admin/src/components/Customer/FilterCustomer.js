@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Modal } from "@mui/material";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
@@ -173,7 +174,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const Customer = () => {
+const FilterCustomer = () => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("checkin");
   const [selected, setSelected] = React.useState([]);
@@ -186,6 +187,7 @@ const Customer = () => {
   // const handleShow = (e) => {
   //   setShow(true);
   // };
+
   const [customerId, setCustomerId] = useState("");
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -196,36 +198,55 @@ const Customer = () => {
   };
   const [customers, setCustomers] = useState([]);
   const [catetables, setCateTables] = useState([]);
+  const [name, setName] = useState(localStorage.getItem("selectedName") || "");
+  const location = useLocation();
 
-  async function getCustomers() {
-    const res = await axios.get("http://localhost:8000/customers");
-    setCustomers(res.data.customers);
-  }
   async function getCateTables() {
     const res = await axios.get("http://localhost:8000/catetables");
     setCateTables(res.data.catetable);
   }
-  // Hàm để lấy dữ liệu từ endpoint arrange
-  async function arrangeCustomers() {
+  async function getCustomers(name) {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/customers?arrange=true"
-      );
-      if (res.data && res.data.customers) {
-        setCustomers(res.data.customers);
-      } else {
-        console.error(
-          "Error arranging customers: Customers data not found in response"
-        );
-      }
+      const res = await axios.post("http://localhost:8000/customers/filter", {
+        name: name,
+      });
+      setCustomers(res.data.customers);
+    } catch (error) {
+      console.error("Error getting customers:", error);
+    }
+  }
+
+  async function arrangeCustomers(name) {
+    try {
+      const res = await axios.post(`http://localhost:8000/customers/filter`, {
+        name: name,
+        arrange: true,
+      });
+      setCustomers(res.data.customers);
+      console.log(res.data.customers);
     } catch (error) {
       console.error("Error arranging customers:", error);
     }
   }
+
   useEffect(() => {
-    getCustomers();
-    getCateTables();
-  }, []);
+    if (name) {
+      getCustomers(name);
+      getCateTables(name); // Bạn cần định nghĩa hàm này hoặc bỏ nó nếu không cần
+    }
+
+    return () => {
+      localStorage.removeItem("selectedName"); // Xóa name khỏi Local Storage khi component unmount
+    };
+  }, [name]);
+  const handleAutocompleteChange = async (event, option) => {
+    if (option) {
+      const selectedName = option.name;
+      localStorage.setItem("selectedName", selectedName);
+      navigate("/customers/filter/" + name);
+      setName(selectedName);
+    }
+  };
 
   async function deleteCustomer() {
     await axios.delete("http://localhost:8000/customers/" + customerId);
@@ -235,6 +256,7 @@ const Customer = () => {
   const editCustomer = (e) => {
     navigate("/customers/" + e);
   };
+
   const FilterCates = async (name) => {
     try {
       localStorage.setItem("selectedName", name);
@@ -380,9 +402,10 @@ const Customer = () => {
               marginLeft: "20px",
             }}
           >
-            <Button variant="contained" onClick={arrangeCustomers}>
+            <Button variant="contained" onClick={() => arrangeCustomers(name)}>
               Arrange
             </Button>
+
             <div style={{ marginLeft: "20px" }}>
               {" "}
               {/* Tạo một khoảng trống giữa Button và Autocomplete */}
@@ -391,11 +414,7 @@ const Customer = () => {
                 id="combo-box-demo"
                 options={catetables}
                 getOptionLabel={(option) => option.name}
-                onChange={(event, option) => {
-                  if (option) {
-                    FilterCates(option.name);
-                  }
-                }}
+                onChange={handleAutocompleteChange}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
                   <TextField
@@ -552,4 +571,4 @@ const Customer = () => {
   );
 };
 
-export default Customer;
+export default FilterCustomer;

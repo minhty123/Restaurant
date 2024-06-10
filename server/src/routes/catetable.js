@@ -8,4 +8,5 @@ router.delete('/:id', CateTableController.delete);
 router.get('/:slug', CateTableController.detail);
 router.get('/', CateTableController.show);
 
+
 module.exports = router;

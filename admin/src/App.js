@@ -35,6 +35,9 @@ const ViewEmployees = React.lazy(() => import("./pages/Employee/ViewEmployee"));
 const ViewAddMenu = React.lazy(() => import("./pages/Menu/ViewAddMenu"));
 const ViewMenu = React.lazy(() => import("./pages/Menu/ViewMenu"));
 const ViewTable = React.lazy(() => import("./pages/Table/ViewTable"));
+const ViewFilterCustomer = React.lazy(() =>
+  import("./pages/Customer/ViewFilterCustomer")
+);
 function App() {
   return (
     <>
@@ -54,6 +57,10 @@ function App() {
           <Route
             path="/catetables/edit/:slug"
             element={<ViewEditCateTable />}
+          />
+          <Route
+            path="/customers/filter/:name"
+            element={<ViewFilterCustomer />}
           />
           <Route path="/customers/edit/:slug" element={<ViewEditCustomer />} />
           <Route path="/employees" element={<ViewEmployees />} />

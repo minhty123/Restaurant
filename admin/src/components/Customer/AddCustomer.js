@@ -61,6 +61,19 @@ const AddCustomer = () => {
       return;
     }
 
+    // Kiểm tra xem số điện thoại đã tồn tại chưa
+    const phoneCheckRes = await axios.post(
+      "http://localhost:8000/customers/check-phone",
+      {
+        phone: phone,
+      }
+    );
+
+    if (phoneCheckRes.data.exists) {
+      setError("Số điện thoại đã tồn tại.");
+      return;
+    }
+
     const newCustomer = {
       name: name,
       address: address,
@@ -94,6 +107,7 @@ const AddCustomer = () => {
     }
     setValidated(true);
   }
+
   const handleChange = (event) => {
     setCatetable(event.target.value);
   };

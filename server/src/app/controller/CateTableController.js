@@ -9,6 +9,8 @@ class CateTableController {
         res.status(500).json({ success: false, err });
       });
   }
+  
+
   //[GET] /catetables/:slug
   async detail(req, res) {
     CateTable.findOne({ slug: req.params.slug })

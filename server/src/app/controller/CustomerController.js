@@ -1,5 +1,6 @@
 const Customer = require('../models/Customer');
 const Table = require('../models/Table');
+const Catetable = require('../models/CateTable');
 const optimizeSeating = require('../../utils/arrange');
 
 class CustomerController {
@@ -31,9 +32,16 @@ class CustomerController {
           customersInRange,
           tables
         );
-
+        // Lưu trữ kết quả tối ưu vào cơ sở dữ liệu
+        const updatedCustomers = await Promise.all(
+          optimizedCustomers.map(async (customer) => {
+            return await Customer.findByIdAndUpdate(customer._id, customer, {
+              new: true
+            });
+          })
+        );
         // Return the optimized list of customers
-        res.status(200).json({ success: true, customers: optimizedCustomers });
+        res.status(200).json({ success: true, customers: updatedCustomers });
       } else {
         // If it's not a new arrangement, simply return all customers
         res.status(200).json({ success: true, customers });
@@ -44,53 +52,67 @@ class CustomerController {
     }
   }
 
-  // async show(req, res) {
-  //   Customer.find({})
-  //     .then((customer) => {
-  //       res.status(200).json({ success: true, customer });
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).json({ success: false, err });
-  //     });
-  // }
-  // // [GET] /customers/arrange
-  // async arrange(req, res) {
-  //   try {
-  //     const startOfDay = new Date();
-  //     startOfDay.setHours(8, 0, 0, 0); // 8:00 AM today
+  // [POST] /customers/filter
+  async filter(req, res) {
+    try {
+      const isNewArrangement = req.body.arrange === true; // Chuyển đổi từ req.query.arrange sang req.body.arrange
+      const catetableName = req.body.name;
 
-  //     const endOfDay = new Date();
-  //     endOfDay.setHours(22, 0, 0, 0); // 10:00 PM today
+      // Lọc khách hàng theo catetable tương ứng với name
+      const customers = await Customer.find({ catetable: catetableName });
 
-  //     // Lấy danh sách khách hàng có thời gian checkin từ 8h sáng tới 10h tối trong ngày hôm nay
-  //     const customers = await Customer.find({
-  //       checkin: { $gte: startOfDay, $lte: endOfDay }
-  //     });
+      if (isNewArrangement) {
+        const startOfDay = new Date();
+        startOfDay.setHours(8, 0, 0, 0);
+        const endOfDay = new Date();
+        endOfDay.setHours(22, 0, 0, 0);
 
-  //     // Lấy tất cả các bàn
-  //     const tables = await Table.find({});
+        // Lọc khách hàng trong khoảng thời gian xác định
+        const customersInRange = await Customer.find({
+          catetable: catetableName,
+          checkin: { $gte: startOfDay, $lte: endOfDay }
+        });
 
-  //     // Set lại trạng thái của tất cả các bàn thành 'available'
-  //     const updatedTables = await Promise.all(
-  //       tables.map(async (table) => {
-  //         table.status = 'available';
-  //         await table.save();
-  //         return table;
-  //       })
-  //     );
+        // Lọc bàn theo type tương ứng với name
+        const tables = await Table.find({ type: catetableName });
 
-  //     // Gọi hàm optimizeSeating và lấy danh sách khách hàng đã được tối ưu
-  //     const optimizedCustomers = await optimizeSeating(
-  //       customers,
-  //       updatedTables
-  //     );
+        // Cập nhật trạng thái của các bàn thành available
+        await Table.updateMany(
+          { type: catetableName },
+          { status: 'available' }
+        );
 
-  //     // Trả về kết quả dưới dạng JSON, bao gồm danh sách khách hàng đã được tối ưu
-  //     res.status(200).json({ success: true, customers: optimizedCustomers });
-  //   } catch (err) {
-  //     res.status(500).json({ success: false, err });
-  //   }
-  // }
+        // Truyền vào hàm optimizeSeating chỉ các khách hàng và bàn có loại tương ứng với name
+        const optimizedCustomers = await optimizeSeating(
+          customersInRange,
+          tables
+        );
+
+        // Trả về danh sách khách hàng đã tối ưu
+        res.status(200).json({ success: true, customers: optimizedCustomers });
+      } else {
+        // Trả về danh sách khách hàng đã tìm được
+        res.status(200).json({ success: true, customers });
+      }
+    } catch (err) {
+      // Xử lý lỗi
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+  // [POST] /customers/check-phone
+  async checkPhone(req, res) {
+    try {
+      const { phone } = req.body;
+      const existingCustomer = await Customer.findOne({ phone: phone });
+      if (existingCustomer) {
+        res.status(200).json({ exists: true });
+      } else {
+        res.status(200).json({ exists: false });
+      }
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
 
   //[GET] /customers/:slug
   async detail(req, res) {

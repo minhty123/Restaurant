@@ -51,7 +51,7 @@ const Header = () => {
               className="hover:text-brightColor transition-all cursor-pointer"
               onClick={closeMenu}
             >
-              Orders
+              Khách Hàng
             </Link>
 
             <Link

@@ -12,6 +12,20 @@ class EmployeeController {
         res.status(500).json({ success: false, err });
       });
   }
+  // [POST] /employees/check-phone
+  async checkPhone(req, res) {
+    try {
+      const { phone } = req.body;
+      const existingEmployee = await Employee.findOne({ phone: phone });
+      if (existingEmployee) {
+        res.status(200).json({ exists: true });
+      } else {
+        res.status(200).json({ exists: false });
+      }
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
   //[GET] /employees/:slug
   async detail(req, res) {
     Employee.findOne({ slug: req.params.slug })

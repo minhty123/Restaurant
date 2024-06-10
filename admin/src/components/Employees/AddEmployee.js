@@ -53,6 +53,18 @@ const AddEmployee = () => {
       setError("Lương không được nhỏ hơn 0");
       return;
     }
+    // Kiểm tra xem số điện thoại đã tồn tại chưa
+    const phoneCheckRes = await axios.post(
+      "http://localhost:8000/employees/check-phone",
+      {
+        phone: phone,
+      }
+    );
+
+    if (phoneCheckRes.data.exists) {
+      setError("Số điện thoại đã tồn tại.");
+      return;
+    }
     const newEmployee = {
       name: name,
       gender: gender,
