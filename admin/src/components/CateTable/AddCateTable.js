@@ -112,7 +112,8 @@ const AddCateTable = () => {
               onChange={(e) => setUnit(e.target.value)}
             >
               <MenuItem value={"Bàn"}>Bàn</MenuItem>
-              <MenuItem value={"Chỗ"}>Cái</MenuItem>
+
+              <MenuItem value={"Phòng"}>Phòng</MenuItem>
             </Select>
           </FormControl>
           <TextField

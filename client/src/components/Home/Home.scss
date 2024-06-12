@@ -1,0 +1,115 @@
+main {
+    color: #454754;
+    text-align: center;
+  }
+  
+  section#about, section#menu, section#reservation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+  
+  .content {
+    box-sizing: border-box;
+    padding: 40px;
+    width: 50%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+  }
+  
+  .topic {
+    letter-spacing: 10px;
+    text-transform: uppercase;
+  }
+  
+  .content a{
+    color: #d3a261;
+    text-transform: uppercase;
+    font-size: 14px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #d3a261;
+  }
+  
+  .content h2 {
+    margin-top: 20px;
+  }
+  
+  .content p:nth-of-type(2) {
+    line-height: 1.8;
+  }
+  
+  .symbol {
+    color: #74788e;
+    font-size: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .img_container {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  section img {
+    width: 60%;
+    min-width: 300px;
+  }
+  
+  #menu .img_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 20px 20px;
+  }
+  
+  #menu img {
+    width: 100%;
+    min-width: 50px;
+  }
+  
+  .align_end {
+    align-self: end;
+  }
+  
+  .align_start {
+    align-self: start;
+  }
+  
+  #reservation .img_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-gap: 20px 20px;
+  }
+  
+  #reservation img {
+    width: 100%;
+    min-width: 50px;
+    max-width: 320px;
+  }
+  
+  .divider {
+    height: 500px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+  }
+  
+  .divider .topic {
+    color: #f9f9f9;
+  }
+  
+  main section:nth-of-type(2) {
+    // background: #24324a url(../img/bread.jpg) no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  main section:nth-of-type(4) {
+    // background: #24324a url(../img/cookies.jpg) no-repeat center center fixed;
+    background-size: cover;
+  }
+  

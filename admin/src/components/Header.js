@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { BiRestaurant } from "react-icons/bi";
 import Button from "../layouts/Button";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
-
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { AiOutlineClose } from "react-icons/ai";
 
 const Header = () => {
@@ -68,8 +70,12 @@ const Header = () => {
             >
               Không gian
             </Link>
-
-            <button>Admin</button>
+            <Box display="flex" alignItems="center">
+              <Avatar alt="User Avatar" src="/assets/img/pic1.png" />
+              <Typography variant="body1" style={{ marginRight: 8 }}>
+                Minh Ty
+              </Typography>
+            </Box>
           </nav>
 
           <div className="md:hidden flex items-center">

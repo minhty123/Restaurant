@@ -1,0 +1,101 @@
+// Footer
+
+footer {
+  background-color: #0e131c;
+  color: #f9f9f9;
+  line-height: 2;
+  position: relative;
+
+  #top { 
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      top: -25px;
+      transform: translateX(-50%);
+      background-color: #fff;
+      color: black;
+      line-height: normal;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      
+      #arrow {
+        color: #0e131c;
+          transform: rotate(90deg);
+          font-size: 40px;
+          margin-left: 12px; 
+      }
+  }
+
+  #info {
+      display: flex;
+      justify-content: space-between;
+      min-height: 200px;
+
+      h2 {
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          font-size: 16px;
+      }
+
+      p {
+          font-size: 13px;
+      }
+
+      > div {
+          display: flex;
+          flex-flow: column wrap;
+          justify-content: center;
+      }
+
+      #locations {
+          width: 35%;
+          margin-left: 100px;
+          .address2{
+margin-right: 150px;
+          }
+      }
+
+      #hours {
+        
+          width: 50%;
+          margin-right: 100px;
+      }
+
+      .address_container, .open_container {
+          margin-top: 20px;
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+      }
+
+      .dot {
+          padding: 0 10px;
+          font-size: 20px;
+      }
+  }
+
+  .copyright_container {
+      width: 100%;
+      
+      background-color: #393b46;
+  }
+
+  #copyright {
+      min-height: 70px;
+      margin-left: 100px;
+      margin-right: 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      div {
+          p {
+              font-size: 12px;
+          }
+      }
+  }
+}
