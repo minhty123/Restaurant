@@ -28,7 +28,7 @@ const Header = () => {
               <BiRestaurant size={32} />
             </span>
             <a href="/">
-              <h1 className="text-xl font-semibold">Restaurant</h1>
+              <h1 className="text-xl font-semibold">VERLEN</h1>
             </a>
           </div>
 

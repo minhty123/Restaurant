@@ -49,7 +49,7 @@ const Header = () => {
       <div className="gradient">
         <div className="container">
           <h2 id="logo">
-            <a href="index.html"> Rosa </a>
+            <a href="/"> VERLEN </a>
           </h2>
           <img
             id="open_menu"
@@ -84,7 +84,7 @@ const Header = () => {
             </a>
             <a href="#reservation" className="menu_link" onClick={smoothScroll}>
               {" "}
-              Reservations{" "}
+              Tables{" "}
             </a>
             <a href="#info" className="menu_link" onClick={smoothScroll}>
               {" "}
@@ -95,7 +95,7 @@ const Header = () => {
       </div>
       <div className="welcome_container">
         <h1 className="highlight">Welcome</h1>
-        <h1 className="brand"> The Rosa </h1>
+        <h1 className="brand"> The VERLEN </h1>
         <span className="symbol"> &#10059; </span>
         <h2> Ready to be opened </h2>
       </div>

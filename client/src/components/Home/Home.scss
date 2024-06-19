@@ -1,3 +1,4 @@
+
 main {
     color: #454754;
     text-align: center;
@@ -31,6 +32,16 @@ main {
     padding-bottom: 2px;
     border-bottom: 2px solid #d3a261;
   }
+  .content button{
+    color: #d3a261;
+    text-transform: uppercase;
+    border: none;
+    font-size: 14px;
+    padding-bottom: 2px;
+    background-color: transparent;
+    border-bottom: 2px solid #d3a261;
+    
+  }
   
   .content h2 {
     margin-top: 20px;
@@ -61,6 +72,7 @@ main {
   
   #menu .img_container {
     display: grid;
+    margin-left: 50px;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-gap: 20px 20px;
@@ -104,12 +116,17 @@ main {
   }
   
   main section:nth-of-type(2) {
-    // background: #24324a url(../img/bread.jpg) no-repeat center center fixed;
+    background: #24324a no-repeat center center fixed;
     background-size: cover;
   }
   
   main section:nth-of-type(4) {
-    // background: #24324a url(../img/cookies.jpg) no-repeat center center fixed;
+    background: #24324a ;
     background-size: cover;
   }
-  
+  .highlight {
+    color: #d3a261;
+    font-family: 'Allura', cursive, Calibri, sans-serif;
+    text-transform: none;
+    font-size: 60px;
+  }

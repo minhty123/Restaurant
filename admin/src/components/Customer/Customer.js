@@ -65,19 +65,19 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "name",
+    label: "Họ Và Tên",
   },
   {
     id: "address",
     numeric: false,
     disablePadding: false,
-    label: "address",
+    label: "Địa chỉ",
   },
   {
     id: "phone",
     numeric: false,
     disablePadding: false,
-    label: "phone",
+    label: "SĐT",
   },
   {
     id: "checkin",
@@ -95,7 +95,7 @@ const headCells = [
     id: "catetable",
     numeric: false,
     disablePadding: false,
-    label: "Loại Bàn",
+    label: "Loại Bàn(Không gian)",
   },
   {
     id: "o_table",
@@ -381,7 +381,7 @@ const Customer = () => {
             }}
           >
             <Button variant="contained" onClick={arrangeCustomers}>
-              Arrange
+              Sắp xếp bàn
             </Button>
             <div style={{ marginLeft: "20px" }}>
               {" "}

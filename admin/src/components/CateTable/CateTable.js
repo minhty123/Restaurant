@@ -77,6 +77,12 @@ const headCells = [
     label: "Mô tả",
   },
   {
+    id: "reversed_time",
+    numeric: false,
+    disablePadding: false,
+    label: "Thời gian Làm sạch",
+  },
+  {
     id: "Action",
     numeric: false,
     disablePadding: false,
@@ -356,9 +362,12 @@ const Menu = () => {
                       </TableCell>
                       <TableCell align="left">{catetable.price}</TableCell>
                       <TableCell align="left">
-                        {catetable.describe.length > 25
-                          ? `${catetable.describe.substring(0, 25)}...`
+                        {catetable.describe.length > 40
+                          ? `${catetable.describe.substring(0, 40)}...`
                           : catetable.describe}
+                      </TableCell>
+                      <TableCell align="left">
+                        {catetable.reversed_time}
                       </TableCell>
                       <TableCell align="left">
                         <Button

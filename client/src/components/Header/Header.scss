@@ -1,8 +1,9 @@
 header {
   height: 100vh;
   position: relative;
-  // background: #0e131c url("../img/main_bg.jpg") no-repeat center center fixed;
+  background: #0e131c url("#424242") no-repeat center center fixed;
   background-size: cover;
+  
 }
 
 a {
@@ -26,7 +27,9 @@ nav a:nth-of-type(5) {
 nav a.active {
   border-bottom: 2px solid #e6e6e6;
 }
-
+.gradient{
+  position: fixed;
+}
 .container {
   text-transform: uppercase;
   display: flex;

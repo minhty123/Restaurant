@@ -1,0 +1,119 @@
+
+.menus {
+    color: #454754;
+    text-align: center;
+  }
+  
+   section#menu {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+  
+  .content {
+    box-sizing: border-box;
+    padding: 40px;
+    width: 50%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+  }
+  
+  .topic {
+    letter-spacing: 10px;
+    text-transform: uppercase;
+  }
+  
+  .content a{
+    color: #d3a261;
+    text-transform: uppercase;
+    font-size: 14px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #d3a261;
+  }
+  .content button{
+    color: #d3a261;
+    text-transform: uppercase;
+    border: none;
+    font-size: 14px;
+    padding-bottom: 2px;
+    background-color: transparent;
+    border-bottom: 2px solid #d3a261;
+    
+  }
+  
+  .content h2 {
+    margin-top: 20px;
+  }
+  
+  .content p:nth-of-type(2) {
+    line-height: 1.8;
+  }
+  
+  .symbol {
+    color: #74788e;
+    font-size: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .img_container {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  section img {
+    width: 60%;
+    min-width: 300px;
+  }
+  
+  #menu .img_container {
+    display: grid;
+    margin-left: 50px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 20px 20px;
+  }
+  
+  #menu img {
+    width: 100%;
+    min-width: 50px;
+  }
+  
+  .align_end {
+    align-self: end;
+  }
+  
+  .align_start {
+    align-self: start;
+  }
+  
+  
+  .divider {
+    height: 500px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+  }
+  
+  .divider .topic {
+    color: #f9f9f9;
+  }
+  .menus section:nth-of-type(1) {
+    background: #ECF0F1 ;
+    background-size: cover;
+  }
+  .menus section:nth-of-type(2) {
+    background: #FDFEFE ;
+    background-size: cover;
+  }
+  
+  .highlight {
+    color: #d3a261;
+    font-family: 'Allura', cursive, Calibri, sans-serif;
+    text-transform: none;
+    font-size: 60px;
+  }
